@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Alumni Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="portal-navbar">
+
+    <div class="portal-logo">
+        College Alumni Portal
+    </div>
+
+    <div class="portal-nav-links">
+
+    <a href="{{ url_for('home') }}">
+        Home
+    </a>
+
+    <a href="{{ url_for('alumni_dashboard') }}"
+       class="active">
+        Dashboard
+    </a>
+
+    <a href="{{ url_for('alumni_connections') }}">
+    Connections
+</a>
+
+    <a href="{{ url_for('alumni_dashboard') }}#mentorship">
+        Mentorship
+    </a>
+
+    <a href="{{ url_for('alumni_tasks') }}">
+        Tasks
+    </a>
+
+    <a href="{{ url_for('messages') }}">
+        Messages
+    </a>
+
+    <a href="#profile">
+        Profile
+    </a>
+
+    <a href="{{ url_for('logout') }}">
+        Logout
+    </a>
+
+</div>
+</nav>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="alumni-page">
+
+
+    <!-- WELCOME CARD -->
+
+    <section class="alumni-welcome">
+
+        <div>
+
+            <p class="small-heading">
+                ALUMNI DASHBOARD
+            </p>
+
+            <h1>
+                Welcome,
+                {{ alumni.get("full_name", "Alumni") }}
+            </h1>
+
+            <p class="welcome-description">
+
+                Stay connected with your college,
+                support students and build meaningful
+                professional connections.
+
+            </p>
+
+        </div>
+
+
+        <div class="alumni-profile-mini">
+
+            <div class="alumni-avatar">
+
+                {{ alumni.get(
+                    "full_name",
+                    "A"
+                )[0]|upper }}
+
+            </div>
+
+            <div>
+
+                <strong>
+                    {{ alumni.get(
+                        "full_name",
+                        "Alumni"
+                    ) }}
+                </strong>
+
+                <span>
+                    Alumni
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= STATISTICS ================= -->
+
+    <section class="alumni-stats">
+
+        <div class="alumni-stat-card">
+
+            <div class="stat-number">
+                {{ total_connections }}
+            </div>
+
+            <div class="stat-label">
+                Connections
+            </div>
+
+        </div>
+
+
+        <div class="alumni-stat-card">
+
+            <div class="stat-number">
+                {{ pending_requests }}
+            </div>
+
+            <div class="stat-label">
+                Pending Requests
+            </div>
+
+        </div>
+
+
+        <div class="alumni-stat-card">
+
+            <div class="stat-number">
+                {{ mentorship_requests }}
+            </div>
+
+            <div class="stat-label">
+                Mentorship Requests
+            </div>
+
+        </div>
+
+
+        <div class="alumni-stat-card">
+
+            <div class="stat-number">
+                {{ tasks_count }}
+            </div>
+
+            <div class="stat-label">
+                Tasks
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= CONNECTION REQUESTS ================= -->
+
+    <section class="alumni-section"
+         id="connections">
+
+    <div class="section-heading">
+
+        <div>
+
+            <h2>
+                Mentorship Requests
+            </h2>
+
+            <p>
+                Students requesting your
+                mentorship and guidance.
+            </p>
+
+        </div>
+
+        <span class="pending-badge">
+
+            {{ mentorship_requests }}
+            Pending
+
+        </span>
+
+    </div>
+
+
+    {% if mentorship_request_list %}
+
+
+        {% for request in mentorship_request_list %}
+
+
+        <div class="connection-request">
+
+
+            <div class="student-avatar">
+
+                {{ request.student.get(
+                    "full_name",
+                    "S"
+                )[0]|upper }}
+
+            </div>
+
+
+            <div class="connection-info">
+
+                <h3>
+
+                    {{ request.student.get(
+                        "full_name",
+                        "Student"
+                    ) }}
+
+                </h3>
+
+
+                <p>
+
+                    {{ request.student.get(
+                        "degree",
+                        ""
+                    ) }}
+
+                    {% if request.student.get("department") %}
+
+                        •
+                        {{ request.student.get(
+                            "department"
+                        ) }}
+
+                    {% endif %}
+
+                </p>
+
+
+                {% if request.student.get("batch") %}
+
+                <span>
+
+                    Batch
+                    {{ request.student.get("batch") }}
+
+                </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="connection-actions">
+
+
+                <a href="{{ url_for(
+                    'accept_mentorship',
+                    request_id=request.id
+                ) }}"
+                   class="accept-btn">
+
+                    Accept
+
+                </a>
+
+
+                <a href="{{ url_for(
+                    'reject_mentorship',
+                    request_id=request.id
+                ) }}"
+                   class="reject-btn">
+
+                    Reject
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+        {% endfor %}
+
+
+    {% else %}
+
+
+        <div class="empty-section">
+
+            <h3>
+                No Mentorship Requests
+            </h3>
+
+            <p>
+                New mentorship requests from students
+                will appear here.
+            </p>
+
+        </div>
+
+
+    {% endif %}
+
+</section>
+
+
+    <!-- ================= MENTORSHIP ================= -->
+
+    <section class="alumni-section"
+             id="mentorship">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>
+                    Mentorship
+                </h2>
+
+                <p>
+                    Guide students using your professional
+                    experience.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="mentorship-card">
+
+            <div>
+
+                <h3>
+                    Become a Mentor
+                </h3>
+
+                <p>
+
+                    Share your knowledge, career experience
+                    and industry guidance with students.
+
+                </p>
+
+            </div>
+
+
+            <div>
+
+                {% if alumni.get("mentorship") == "yes" %}
+
+                    <span class="mentor-active">
+                        Available for Mentorship
+                    </span>
+
+                {% else %}
+
+                    <span class="mentor-inactive">
+                        Mentorship Not Enabled
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= PROFILE ================= -->
+
+    <section class="alumni-section"
+             id="profile">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>
+                    Professional Profile
+                </h2>
+
+                <p>
+                    Your information visible to students.
+                </p>
+
+            </div>
+            <a href="{{ url_for('edit_alumni_profile') }}"
+   class="edit-profile-button">
+    Edit Profile
+</a>
+
+        </div>
+
+
+        <div class="profile-grid">
+
+
+            <div class="profile-item">
+
+                <span>
+                    Full Name
+                </span>
+
+                <strong>
+                    {{ alumni.get(
+                        "full_name",
+                        "Not provided"
+                    ) }}
+                </strong>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <span>
+                    Email
+                </span>
+
+                <strong>
+                    {{ alumni.get(
+                        "email",
+                        "Not provided"
+                    ) }}
+                </strong>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <span>
+                    Department
+                </span>
+
+                <strong>
+                    {{ alumni.get(
+                        "department",
+                        "Not provided"
+                    ) }}
+                </strong>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <span>
+                    Graduation Year
+                </span>
+
+                <strong>
+                    {{ alumni.get(
+                        "graduation_year",
+                        alumni.get(
+                            "batch",
+                            "Not provided"
+                        )
+                    ) }}
+                </strong>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <span>
+                    Job Title
+                </span>
+
+                <strong>
+                    {{ alumni.get(
+                        "job_title",
+                        "Not provided"
+                    ) }}
+                </strong>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <span>
+                    Company
+                </span>
+
+                <strong>
+                    {{ alumni.get(
+                        "company",
+                        "Not provided"
+                    ) }}
+                </strong>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <span>
+                    Industry
+                </span>
+
+                <strong>
+                    {{ alumni.get(
+                        "industry",
+                        "Not provided"
+                    ) }}
+                </strong>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <span>
+                    Location
+                </span>
+
+                <strong>
+                    {{ alumni.get(
+                        "current_location",
+                        "Not provided"
+                    ) }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+</body>
+
+</html>

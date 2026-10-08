@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Register College - Alumni Portal</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+<div class="page">
+
+
+    <div class="college-form-card">
+
+
+        <!-- HEADER -->
+
+        <div class="college-form-header">
+
+            <h1>Register Your College</h1>
+
+            <p>
+                Submit your college details to join the Alumni Portal.
+            </p>
+
+        </div>
+
+
+        <!-- FORM -->
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+
+            <!-- =====================================
+                 INSTITUTIONAL DETAILS
+            ====================================== -->
+
+            <div class="form-section">
+
+                <h2>
+                    Institutional Details
+                </h2>
+
+
+                <div class="form-grid">
+
+
+                    <!-- College Name -->
+
+                    <div class="form-group">
+
+                        <label>
+                            College Name
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="college_name"
+                            placeholder="Enter college name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- College Code -->
+
+                    <div class="form-group">
+
+                        <label>
+                            College Code
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="college_code"
+                            placeholder="E.g. NEC01"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- University -->
+
+                    <div class="form-group">
+
+                        <label>
+                            University / Board
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="university"
+                            placeholder="Enter university or board"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Established Year -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Established Year
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="number"
+                            name="established_year"
+                            placeholder="E.g. 2000"
+                            min="1800"
+                            max="2100"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Official Email -->
+
+                    <div class="form-group">
+
+                        <label>
+                            College Official Email
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="email"
+                            name="college_email"
+                            placeholder="info@college.edu"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Phone -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Phone Number
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="tel"
+                            name="college_phone"
+                            placeholder="+91 9876543210"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Campus Address -->
+
+                    <div class="form-group full-width">
+
+                        <label>
+                            Campus Address
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="campus_address"
+                            placeholder="Enter complete campus address"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- City -->
+
+                    <div class="form-group">
+
+                        <label>
+                            City
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="city"
+                            placeholder="Enter city"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- State -->
+
+                    <div class="form-group">
+
+                        <label>
+                            State
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="state"
+                            placeholder="Enter state"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Pincode -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Pincode
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="pincode"
+                            placeholder="Enter pincode"
+                            maxlength="6"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Website -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Official Website
+                        </label>
+
+                        <input
+                            type="url"
+                            name="website"
+                            placeholder="https://www.college.edu"
+                        >
+
+                    </div>
+
+
+                    <!-- College Logo -->
+
+                    <div class="form-group">
+
+                        <label>
+                            College Logo
+                        </label>
+
+                        <input
+                            type="file"
+                            name="college_logo"
+                            accept="image/*"
+                        >
+
+                    </div>
+
+
+                    <!-- Overview -->
+
+                    <div class="form-group full-width">
+
+                        <label>
+                            College Overview / Description
+                        </label>
+
+                        <textarea
+                            name="college_description"
+                            placeholder="Enter brief details about the college, departments, achievements, etc."
+                        ></textarea>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =====================================
+                 COLLEGE ADMIN DETAILS
+            ====================================== -->
+
+            <div class="form-section">
+
+                <h2>
+                    Proposed College Administrator
+                </h2>
+
+                <p class="section-description">
+                    This account will become the College Admin after Platform Admin approval.
+                </p>
+
+
+                <div class="form-grid">
+
+
+                    <!-- Admin Name -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Admin Full Name
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="admin_name"
+                            placeholder="Enter admin full name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Admin Email -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Admin Email
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="email"
+                            name="admin_email"
+                            placeholder="admin@college.edu"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Admin Phone -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Admin Phone Number
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="tel"
+                            name="admin_phone"
+                            placeholder="+91 9876543210"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Password -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Account Password
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="password"
+                            name="admin_password"
+                            placeholder="Create password"
+                            required
+                        >
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =====================================
+                 INFORMATION BOX
+            ====================================== -->
+
+            <div class="registration-info">
+
+                <strong>Registration Status</strong>
+
+                <p>
+                    After submission, your college registration will be
+                    marked as <b>Pending</b>. The Platform Admin will
+                    review the details before approving the college.
+                </p>
+
+            </div>
+
+
+
+            <!-- =====================================
+                 SUBMIT
+            ====================================== -->
+
+            <button
+                type="submit"
+                class="college-submit-button"
+            >
+                Submit College Registration
+            </button>
+
+
+            <!-- BACK -->
+
+            <a href="{{ url_for('home') }}" class="back-home">
+    Back to Home
+</a>
+
+
+        </form>
+
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>

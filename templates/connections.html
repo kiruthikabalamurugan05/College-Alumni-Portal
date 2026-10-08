@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Connections - College Alumni Portal</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f4f6fb;
+
+            color: #173b5c;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+
+            height: 68px;
+
+            background: white;
+
+            border-bottom: 1px solid #e4e8ef;
+
+            display: flex;
+
+            align-items: center;
+
+            padding: 0 28px;
+        }
+
+        .brand {
+
+            font-size: 20px;
+
+            font-weight: 700;
+
+            color: #173b5c;
+
+            white-space: nowrap;
+        }
+
+        .nav-links {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 25px;
+
+            margin-left: auto;
+
+            margin-right: 30px;
+        }
+
+        .nav-links a {
+
+            text-decoration: none;
+
+            color: #53657a;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            padding: 24px 0;
+
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+
+            color: #4f35f5;
+        }
+
+        .nav-links a.active::after {
+
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            right: 0;
+
+            bottom: 0;
+
+            height: 3px;
+
+            background: #4f35f5;
+        }
+
+        .student-profile {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+        }
+
+        .profile-circle {
+
+            width: 34px;
+
+            height: 34px;
+
+            border-radius: 50%;
+
+            background: #4f35f5;
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 13px;
+
+            font-weight: 700;
+        }
+
+        .profile-info {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 2px;
+        }
+
+        .profile-name {
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+        .profile-role {
+
+            font-size: 10px;
+
+            color: #7b8794;
+        }
+
+        .logout {
+
+            margin-left: 12px;
+
+            text-decoration: none;
+
+            color: #6b7280;
+
+            font-size: 11px;
+        }
+
+        /* ================= PAGE ================= */
+
+        .page {
+
+            width: calc(100% - 100px);
+
+            max-width: 1450px;
+
+            margin: 25px auto 50px;
+        }
+
+        /* ================= HERO ================= */
+
+        .hero {
+
+            background: linear-gradient(
+                110deg,
+                #4938df,
+                #2678df,
+                #0bb3c9
+            );
+
+            border-radius: 12px;
+
+            padding: 27px 30px;
+
+            color: white;
+
+            box-shadow:
+                0 7px 20px
+                rgba(49,79,190,0.16);
+        }
+
+        .college-badge {
+
+            display: inline-block;
+
+            background: white;
+
+            color: #4f35f5;
+
+            padding: 6px 12px;
+
+            border-radius: 16px;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            margin-bottom: 10px;
+        }
+
+        .hero h1 {
+
+            margin: 0;
+
+            font-size: 26px;
+
+            color: white;
+        }
+
+        .hero p {
+
+            margin: 7px 0 0;
+
+            font-size: 12px;
+
+            color: white;
+        }
+
+        /* ================= CONNECTION CARD ================= */
+
+        .connections-card {
+
+            margin-top: 18px;
+
+            background: white;
+
+            border: 1px solid #e1e7ef;
+
+            border-radius: 9px;
+
+            overflow: hidden;
+        }
+
+        .card-header {
+
+            padding: 18px;
+
+            border-bottom: 1px solid #e7ebf0;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+        .card-header h2 {
+
+            margin: 0;
+
+            font-size: 16px;
+
+            color: #173b5c;
+        }
+
+        .count {
+
+            font-size: 11px;
+
+            color: #718096;
+        }
+
+        /* ================= CONNECTION ITEM ================= */
+
+        .connection {
+
+            padding: 17px 18px;
+
+            border-bottom: 1px solid #e7ebf0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+        .connection:last-child {
+
+            border-bottom: none;
+        }
+
+        .person {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+        }
+
+        .avatar {
+
+            width: 48px;
+
+            height: 48px;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+
+            background: #4f35f5;
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-weight: 700;
+
+            font-size: 14px;
+        }
+
+        .person-info h3 {
+
+            margin: 0;
+
+            font-size: 14px;
+
+            color: #173b5c;
+        }
+
+        .job {
+
+            display: block;
+
+            margin-top: 4px;
+
+            font-size: 11px;
+
+            color: #1265ef;
+
+            font-weight: 600;
+        }
+
+        .company {
+
+            display: block;
+
+            margin-top: 3px;
+
+            font-size: 10px;
+
+            color: #718096;
+        }
+
+        /* ================= STATUS ================= */
+
+        .right-side {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+        .status {
+
+            padding: 5px 9px;
+
+            border-radius: 12px;
+
+            font-size: 9px;
+
+            font-weight: 700;
+        }
+
+        .status.accepted {
+
+            background: #dcf8e8;
+
+            color: #16834b;
+        }
+
+        .status.pending {
+
+            background: #fff1cc;
+
+            color: #946200;
+        }
+
+        .profile-btn {
+
+            text-decoration: none;
+
+            padding: 7px 11px;
+
+            border-radius: 5px;
+
+            border: 1px solid #cdd5df;
+
+            color: #526579;
+
+            background: white;
+
+            font-size: 10px;
+
+            font-weight: 600;
+        }
+
+        /* ================= EMPTY ================= */
+
+        .empty {
+
+            margin: 18px;
+
+            padding: 60px 20px;
+
+            text-align: center;
+
+            border: 1px dashed #d4dce6;
+
+            border-radius: 8px;
+
+            color: #718096;
+        }
+
+        .empty h3 {
+
+            margin: 0 0 6px;
+
+            font-size: 15px;
+
+            color: #173b5c;
+        }
+
+        .empty p {
+
+            margin: 0;
+
+            font-size: 11px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 850px) {
+
+            .page {
+
+                width: calc(100% - 30px);
+            }
+
+            .connection {
+
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+            .right-side {
+
+                width: 100%;
+
+                justify-content: flex-end;
+            }
+
+            .nav-links {
+
+                gap: 12px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <div class="brand">
+        College Alumni Portal
+    </div>
+
+    <div class="nav-links">
+
+        <a href="{{ url_for('student_dashboard') }}"
+           class="{% if request.endpoint == 'student_dashboard' %}active{% endif %}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('find_alumni') }}"
+           class="{% if request.endpoint == 'find_alumni' %}active{% endif %}">
+            Find Alumni
+        </a>
+
+        <a href="{{ url_for('student_connections') }}"
+           class="{% if request.endpoint == 'student_connections' %}active{% endif %}">
+            Connections
+        </a>
+
+        <a href="{{ url_for('messages') }}"
+           class="{% if request.endpoint == 'messages' %}active{% endif %}">
+            Messages
+        </a>
+
+        <a href="{{ url_for('student_dashboard') }}#tasks"
+           class="{% if request.args.get('section') == 'mentorship' %}active{% endif %}">
+            Mentorship
+        </a>
+
+        <a href="{{ url_for('student_dashboard') }}#tasks"
+           class="{% if request.args.get('section') == 'tasks' %}active{% endif %}">
+            Tasks
+        </a>
+
+    </div>
+
+    <div class="student-profile">
+
+        <div class="profile-circle">
+            {{ student.get("full_name", "S")[0]|upper }}
+        </div>
+
+        <div class="profile-info">
+
+            <span class="profile-name">
+                {{ student.get("full_name", "Student") }}
+            </span>
+
+            <span class="profile-role">
+                Student
+            </span>
+
+        </div>
+
+        <a href="{{ url_for('logout') }}" class="logout">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- ================= PAGE ================= -->
+
+<main class="page">
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <span class="college-badge">
+
+            My Network
+
+        </span>
+
+
+        <h1>
+            My Connections
+        </h1>
+
+
+        <p>
+            View alumni connections and build your professional network.
+        </p>
+
+    </section>
+
+
+
+    <!-- CONNECTIONS -->
+
+    <section class="connections-card">
+
+        <div class="card-header">
+
+            <h2>
+                Connected Alumni
+            </h2>
+
+            <span class="count">
+
+                {{ connections|length }}
+
+                connection{% if connections|length != 1 %}s{% endif %}
+
+            </span>
+
+        </div>
+
+
+        {% if connections %}
+
+
+            {% for item in connections %}
+
+                {% set alumni = item.alumni %}
+
+
+                <div class="connection">
+
+
+                    <div class="person">
+
+
+                        <div class="avatar">
+
+                            {{ alumni.get(
+                                "full_name",
+                                "A"
+                            )[0]|upper }}
+
+                        </div>
+
+
+                        <div class="person-info">
+
+                            <h3>
+
+                                {{ alumni.get(
+                                    "full_name",
+                                    "Alumni"
+                                ) }}
+
+                            </h3>
+
+
+                            <span class="job">
+
+                                {{ alumni.get(
+                                    "job_title",
+                                    "Professional"
+                                ) }}
+
+                            </span>
+
+
+                            <span class="company">
+
+                                {{ alumni.get(
+                                    "company",
+                                    "Company"
+                                ) }}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="right-side">
+
+
+                        {% if item.status == "Accepted" %}
+
+                            <span class="status accepted">
+                                Connected
+                            </span>
+
+                        {% else %}
+
+                            <span class="status pending">
+                                Pending
+                            </span>
+
+                        {% endif %}
+
+
+                        <a href="{{ url_for(
+                            'alumni_profile',
+                            alumni_id=alumni['_id']
+                        ) }}"
+                           class="profile-btn">
+
+                            View Profile
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+
+        {% else %}
+
+
+            <div class="empty">
+
+                <h3>
+                    No Connections Yet
+                </h3>
+
+                <p>
+                    Find alumni from your college and send a connection request.
+                </p>
+
+                <br>
+
+                <a href="{{ url_for('find_alumni') }}"
+                   style="
+                       display:inline-block;
+                       padding:9px 14px;
+                       background:#4f35f5;
+                       color:white;
+                       text-decoration:none;
+                       border-radius:5px;
+                       font-size:11px;
+                       font-weight:600;
+                   ">
+
+                    Find Alumni
+
+                </a>
+
+            </div>
+
+
+        {% endif %}
+
+    </section>
+
+</main>
+
+
+</body>
+
+</html>

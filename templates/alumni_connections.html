@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Connections - College Alumni Portal</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #173452;
+        }
+
+        .portal-navbar {
+            height: 76px;
+            background: white;
+            border-bottom: 1px solid #e7eaf0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 45px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .portal-logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #173452;
+        }
+
+        .portal-nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .portal-nav-links a {
+            text-decoration: none;
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .portal-nav-links a:hover,
+        .portal-nav-links a.active {
+            color: #4d35f5;
+        }
+
+        .portal-nav-links .logout {
+            color: #dc3545;
+        }
+
+        .page-container {
+            width: min(1200px, 92%);
+            margin: 0 auto;
+            padding: 40px 0 60px;
+        }
+
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+            color: #173452;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #7b8798;
+            font-size: 14px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 22px rgba(30, 45, 70, 0.05);
+        }
+
+        .section h2 {
+            margin: 0 0 5px;
+            font-size: 19px;
+        }
+
+        .section-subtitle {
+            color: #8994a5;
+            font-size: 13px;
+            margin-bottom: 22px;
+        }
+
+        .connection-card {
+            border: 1px solid #e8ebf1;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .connection-info h3 {
+            margin: 0 0 6px;
+            font-size: 16px;
+            color: #173452;
+        }
+
+        .connection-info p {
+            margin: 4px 0;
+            color: #69778a;
+            font-size: 13px;
+        }
+
+        .connection-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .accept-btn,
+        .reject-btn {
+            text-decoration: none;
+            padding: 9px 15px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .accept-btn {
+            background: #eaf8ef;
+            color: #18864b;
+        }
+
+        .reject-btn {
+            background: #fff0f0;
+            color: #d13a3a;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #8994a5;
+            font-size: 14px;
+        }
+
+        @media (max-width: 800px) {
+            .portal-navbar {
+                padding: 15px 20px;
+                height: auto;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .portal-nav-links {
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 5px;
+            }
+
+            .connection-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="portal-navbar">
+
+    <div class="portal-logo">
+        College Alumni Portal
+    </div>
+
+    <nav class="portal-nav-links">
+
+        <a href="{{ url_for('home') }}">
+            Home
+        </a>
+
+        <a href="{{ url_for('alumni_dashboard') }}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('alumni_connections') }}"
+           class="active">
+            Connections
+        </a>
+
+        <a href="{{ url_for('alumni_dashboard') }}#mentorship">
+    Mentorship
+</a>
+
+<a href="{{ url_for('alumni_tasks') }}">
+    Tasks
+</a>
+
+<a href="{{ url_for('messages') }}">
+    Messages
+</a>
+
+<a href="{{ url_for('alumni_dashboard') }}#profile">
+    Profile
+</a>
+
+<a href="{{ url_for('logout') }}"
+   class="logout">
+    Logout
+</a>
+
+    </nav>
+
+</header>
+
+
+<main class="page-container">
+
+    <div class="page-header">
+        <h1>Connections</h1>
+        <p>
+            Manage your student connection requests and connections.
+        </p>
+    </div>
+
+
+    <!-- PENDING REQUESTS -->
+
+    <section class="section">
+
+        <h2>Connection Requests</h2>
+
+        <div class="section-subtitle">
+            Students who want to connect with you.
+        </div>
+
+        {% if pending_requests %}
+
+            {% for item in pending_requests %}
+
+                <div class="connection-card">
+
+                    <div class="connection-info">
+
+                        <h3>
+                            {{ item.student.get("full_name", "Student") }}
+                        </h3>
+
+                        <p>
+                            Email:
+                            {{ item.student.get("email", "-") }}
+                        </p>
+
+                        <p>
+                            Department:
+                            {{ item.student.get("department", "-") }}
+                        </p>
+
+                    </div>
+
+                    <div class="connection-actions">
+
+                        <a href="{{ url_for(
+                            'accept_connection',
+                            connection_id=item.connection['_id']
+                        ) }}"
+                           class="accept-btn">
+                            Accept
+                        </a>
+
+                        <a href="{{ url_for(
+                            'reject_connection',
+                            connection_id=item.connection['_id']
+                        ) }}"
+                           class="reject-btn">
+                            Reject
+                        </a>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty">
+                No pending connection requests.
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- ACCEPTED CONNECTIONS -->
+
+    <section class="section">
+
+        <h2>My Connections</h2>
+
+        <div class="section-subtitle">
+            Students you are connected with.
+        </div>
+
+        {% if accepted_connections %}
+
+            {% for item in accepted_connections %}
+
+                <div class="connection-card">
+
+                    <div class="connection-info">
+
+                        <h3>
+                            {{ item.student.get("full_name", "Student") }}
+                        </h3>
+
+                        <p>
+                            Email:
+                            {{ item.student.get("email", "-") }}
+                        </p>
+
+                        <p>
+                            Department:
+                            {{ item.student.get("department", "-") }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty">
+                You don't have any accepted connections yet.
+            </div>
+
+        {% endif %}
+
+    </section>
+
+</main>
+
+</body>
+</html>

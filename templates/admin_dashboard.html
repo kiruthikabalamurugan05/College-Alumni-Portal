@@ -1,0 +1,2069 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>College Alumni Portal - Admin Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body.dashboard-body {
+            margin: 0;
+            background: #f5f7fb;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #173452;
+        }
+
+
+        /* =====================================================
+           TOP NAVBAR
+        ===================================================== */
+
+        .top-navbar {
+            width: 100%;
+            height: 76px;
+
+            background: #ffffff;
+            border-bottom: 1px solid #e7eaf0;
+
+            display: grid;
+
+            /*
+                LEFT       CENTER       RIGHT
+                BRAND      NAVIGATION   ADMIN
+            */
+            grid-template-columns: 1fr auto 1fr;
+
+            align-items: center;
+
+            padding: 0 45px;
+
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+
+        /* =====================================================
+           BRAND
+        ===================================================== */
+
+        .brand {
+            justify-self: start;
+
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            white-space: nowrap;
+
+            font-size: 20px;
+            font-weight: 700;
+
+            color: #173452;
+        }
+
+
+        .brand-icon {
+            width: 34px;
+            height: 34px;
+
+            flex-shrink: 0;
+
+            border-radius: 9px;
+
+            background: #4d35f5;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+
+        /* =====================================================
+           NAVIGATION
+        ===================================================== */
+
+        .navbar-links {
+            justify-self: center;
+
+            display: flex;
+            align-items: center;
+
+            gap: 34px;
+
+            height: 76px;
+
+            white-space: nowrap;
+        }
+
+
+        .navbar-links a {
+            position: relative;
+
+            display: flex;
+            align-items: center;
+
+            height: 76px;
+
+            padding: 0 2px;
+
+            text-decoration: none;
+
+            color: #64748b;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            transition: color 0.2s ease;
+        }
+
+
+        .navbar-links a:hover {
+            color: #4d35f5;
+        }
+
+
+        .navbar-links a.active {
+            color: #4d35f5;
+        }
+
+
+        .navbar-links a.active::after {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            right: 0;
+
+            bottom: 0;
+
+            height: 2px;
+
+            background: #4d35f5;
+
+            border-radius: 3px;
+        }
+
+
+        /* =====================================================
+           ADMIN PROFILE
+        ===================================================== */
+
+        .admin-profile {
+            justify-self: end;
+
+            display: flex;
+            align-items: center;
+
+            gap: 11px;
+
+            white-space: nowrap;
+        }
+
+
+        .profile-circle {
+            width: 40px;
+            height: 40px;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+
+            background: #4d35f5;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: 700;
+        }
+
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+
+            margin-right: 8px;
+        }
+
+
+        .profile-info strong {
+            font-size: 13px;
+            color: #173452;
+        }
+
+
+        .profile-info span {
+            font-size: 11px;
+            color: #8994a5;
+
+            margin-top: 3px;
+        }
+
+
+        .logout-link {
+            margin-left: 5px;
+
+            text-decoration: none;
+
+            color: #dc3545;
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+
+        .logout-link:hover {
+            color: #b42318;
+        }
+
+
+        /* =====================================================
+           MAIN CONTAINER
+        ===================================================== */
+
+        .dashboard-container {
+            width: min(1400px, 94%);
+
+            margin: 0 auto;
+
+            padding: 38px 0 60px;
+        }
+
+
+        /* =====================================================
+           FLASH MESSAGE
+        ===================================================== */
+
+        .dashboard-alert {
+            padding: 14px 18px;
+
+            border-radius: 10px;
+
+            margin-bottom: 22px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            font-size: 14px;
+        }
+
+
+        .dashboard-alert.success {
+            background: #eaf8ef;
+            color: #1f7a3d;
+        }
+
+
+        .dashboard-alert.error {
+            background: #fff0f0;
+            color: #b42318;
+        }
+
+
+        .dashboard-alert button {
+            border: none;
+
+            background: transparent;
+
+            font-size: 20px;
+
+            cursor: pointer;
+
+            color: inherit;
+        }
+
+
+        /* =====================================================
+           DASHBOARD HEADER
+        ===================================================== */
+
+        .dashboard-header {
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 30px 32px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            box-shadow: 0 5px 22px rgba(30, 45, 70, 0.06);
+
+            margin-bottom: 25px;
+        }
+
+
+        .small-label {
+            color: #4d35f5;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            letter-spacing: 1.5px;
+        }
+
+
+        .dashboard-header h1 {
+            margin: 8px 0 7px;
+
+            font-size: 29px;
+
+            color: #173452;
+        }
+
+
+        .dashboard-header p {
+            margin: 0;
+
+            color: #778397;
+
+            font-size: 14px;
+        }
+
+
+        .header-actions {
+            display: flex;
+
+            gap: 10px;
+        }
+
+
+        .primary-small-button {
+            display: inline-block;
+
+            text-decoration: none;
+
+            background: #4d35f5;
+
+            color: white;
+
+            padding: 12px 20px;
+
+            border-radius: 8px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+        }
+
+
+        .primary-small-button:hover {
+            background: #3e28dc;
+        }
+
+
+        /* =====================================================
+           STATISTICS
+        ===================================================== */
+
+        .stats-grid {
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .stat-card {
+            background: white;
+
+            border-radius: 13px;
+
+            padding: 22px;
+
+            min-height: 135px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            box-shadow: 0 5px 22px rgba(30, 45, 70, 0.05);
+        }
+
+
+        .stat-title {
+            display: block;
+
+            color: #8994a5;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .stat-number {
+            display: block;
+
+            font-size: 30px;
+
+            color: #173452;
+        }
+
+
+        .stat-icon {
+            width: 46px;
+            height: 46px;
+
+            border-radius: 12px;
+
+            background: #f0edff;
+
+            color: #4d35f5;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: 800;
+
+            font-size: 17px;
+        }
+
+
+        /* =====================================================
+           TWO COLUMN SECTION
+        ===================================================== */
+
+        .dashboard-two-column {
+            display: grid;
+
+            grid-template-columns: 1.35fr 1fr;
+
+            gap: 22px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .dashboard-panel {
+            background: white;
+
+            border-radius: 14px;
+
+            box-shadow: 0 5px 22px rgba(30, 45, 70, 0.05);
+
+            overflow: hidden;
+        }
+
+
+        .panel-header {
+            padding: 22px 25px;
+
+            border-bottom: 1px solid #edf0f4;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+
+        .panel-header h2 {
+            margin: 0 0 5px;
+
+            font-size: 18px;
+
+            color: #173452;
+        }
+
+
+        .panel-header p {
+            margin: 0;
+
+            color: #8994a5;
+
+            font-size: 12px;
+        }
+
+
+        .view-all {
+            text-decoration: none;
+
+            color: #4d35f5;
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+
+        /* =====================================================
+           PENDING COLLEGES
+        ===================================================== */
+
+        .pending-list {
+            padding: 8px 25px 20px;
+        }
+
+
+        .pending-item {
+            padding: 17px 0;
+
+            border-bottom: 1px solid #edf0f4;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+        }
+
+
+        .pending-item:last-child {
+            border-bottom: none;
+        }
+
+
+        .college-info strong {
+            display: block;
+
+            color: #173452;
+
+            font-size: 14px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .college-info span {
+            color: #8994a5;
+
+            font-size: 12px;
+        }
+
+
+        .college-actions {
+            display: flex;
+
+            gap: 7px;
+        }
+
+
+        .approve-btn,
+        .reject-btn,
+        .details-btn {
+            text-decoration: none;
+
+            border-radius: 6px;
+
+            padding: 8px 12px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+
+        .approve-btn {
+            background: #eaf8ef;
+
+            color: #18864b;
+        }
+
+
+        .reject-btn {
+            background: #fff0f0;
+
+            color: #d13a3a;
+        }
+
+
+        .details-btn {
+            background: #f0edff;
+
+            color: #4d35f5;
+        }
+
+
+        .empty-state {
+            padding: 40px 20px;
+
+            text-align: center;
+        }
+
+
+        .empty-state h3 {
+            margin: 0 0 7px;
+
+            color: #173452;
+
+            font-size: 16px;
+        }
+
+
+        .empty-state p {
+            margin: 0;
+
+            color: #8994a5;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           RECENT ACTIVITY
+        ===================================================== */
+
+        .activity-list {
+            padding: 10px 25px 20px;
+        }
+
+
+        .activity-item {
+            display: flex;
+
+            gap: 13px;
+
+            padding: 15px 0;
+
+            border-bottom: 1px solid #edf0f4;
+        }
+
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+
+        .activity-icon {
+            width: 35px;
+            height: 35px;
+
+            min-width: 35px;
+
+            border-radius: 50%;
+
+            background: #f0edff;
+
+            color: #4d35f5;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 12px;
+
+            font-weight: 800;
+        }
+
+
+        .activity-content strong {
+            display: block;
+
+            font-size: 13px;
+
+            color: #173452;
+
+            margin-bottom: 4px;
+        }
+
+
+        .activity-content p {
+            margin: 0 0 4px;
+
+            color: #69778a;
+
+            font-size: 12px;
+
+            line-height: 1.4;
+        }
+
+
+        .activity-time {
+            color: #a0a9b7;
+
+            font-size: 10px;
+        }
+
+
+        /* =====================================================
+           QUICK ACTIONS
+        ===================================================== */
+
+        .quick-panel {
+            margin-bottom: 25px;
+        }
+
+
+        .quick-actions {
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 14px;
+
+            padding: 22px 25px 25px;
+        }
+
+
+        .quick-action {
+            text-decoration: none;
+
+            border: 1px solid #e8ebf1;
+
+            border-radius: 10px;
+
+            padding: 17px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            transition: 0.2s;
+
+            background: white;
+        }
+
+
+        .quick-action:hover {
+            border-color: #cfc8ff;
+
+            transform: translateY(-2px);
+
+            box-shadow: 0 6px 18px rgba(30, 45, 70, 0.06);
+        }
+
+
+        .quick-icon {
+            width: 40px;
+            height: 40px;
+
+            border-radius: 9px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-weight: 800;
+        }
+
+
+        .blue-icon {
+            background: #edf3ff;
+
+            color: #3975d8;
+        }
+
+
+        .purple-icon {
+            background: #f0edff;
+
+            color: #4d35f5;
+        }
+
+
+        .green-icon {
+            background: #eaf8ef;
+
+            color: #18864b;
+        }
+
+
+        .orange-icon {
+            background: #fff4e5;
+
+            color: #d97706;
+        }
+
+
+        .quick-action strong {
+            display: block;
+
+            color: #173452;
+
+            font-size: 12px;
+
+            margin-bottom: 4px;
+        }
+
+
+        .quick-action span {
+            display: block;
+
+            color: #8994a5;
+
+            font-size: 10px;
+        }
+
+
+        /* =====================================================
+           REGISTERED COLLEGES
+        ===================================================== */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+
+        .college-table {
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+
+        .college-table th {
+            background: #fafbfc;
+
+            color: #8994a5;
+
+            text-align: left;
+
+            padding: 13px 18px;
+
+            font-size: 10px;
+
+            letter-spacing: 0.7px;
+
+            text-transform: uppercase;
+        }
+
+
+        .college-table td {
+            padding: 15px 18px;
+
+            border-top: 1px solid #edf0f4;
+
+            color: #526174;
+
+            font-size: 12px;
+        }
+
+
+        .college-table td strong {
+            color: #173452;
+        }
+
+
+        .status-badge {
+            display: inline-block;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            font-size: 10px;
+
+            font-weight: 700;
+        }
+
+
+        .status-approved {
+            background: #eaf8ef;
+
+            color: #18864b;
+        }
+
+
+        .status-pending {
+            background: #fff4e5;
+
+            color: #c56a00;
+        }
+
+
+        .status-rejected {
+            background: #fff0f0;
+
+            color: #d13a3a;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE - TABLET
+        ===================================================== */
+
+        @media (max-width: 1150px) {
+
+            .top-navbar {
+                padding: 0 25px;
+            }
+
+
+            .brand {
+                font-size: 18px;
+            }
+
+
+            .navbar-links {
+                gap: 22px;
+            }
+
+
+            .profile-info {
+                display: none;
+            }
+
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+
+            .dashboard-two-column {
+                grid-template-columns: 1fr;
+            }
+
+
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE - MOBILE
+        ===================================================== */
+
+        @media (max-width: 750px) {
+
+            .top-navbar {
+                height: auto;
+
+                min-height: 76px;
+
+                display: flex;
+
+                flex-wrap: wrap;
+
+                padding: 16px 20px;
+
+                gap: 12px;
+            }
+
+
+            .brand {
+                flex: 1;
+
+                font-size: 18px;
+            }
+
+
+            .admin-profile {
+                margin-left: auto;
+            }
+
+
+            .navbar-links {
+                width: 100%;
+
+                order: 3;
+
+                height: 45px;
+
+                display: flex;
+
+                justify-content: flex-start;
+
+                gap: 24px;
+
+                overflow-x: auto;
+            }
+
+
+            .navbar-links a {
+                height: 45px;
+
+                flex-shrink: 0;
+            }
+
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+
+            .dashboard-header {
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 20px;
+            }
+
+
+            .pending-item {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+
+            .college-actions {
+                flex-wrap: wrap;
+            }
+
+
+            .dashboard-container {
+                width: 92%;
+
+                padding-top: 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<!-- =====================================================
+     TOP NAVBAR
+===================================================== -->
+
+<header class="top-navbar">
+
+
+    <!-- BRAND -->
+
+    <div class="brand">
+
+        <span class="brand-icon">
+            C
+        </span>
+
+        <span>
+            College Alumni Portal
+        </span>
+
+    </div>
+
+
+    <!-- NAVIGATION -->
+
+    <nav class="navbar-links">
+
+        <a href="{{ url_for('home') }}">
+            Home
+        </a>
+
+        <a href="{{ url_for('admin_dashboard') }}"
+           class="active">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('admin_colleges') }}">
+            Colleges
+        </a>
+
+        <a href="{{ url_for('admin_users') }}">
+            Users
+        </a>
+
+    </nav>
+
+
+    <!-- ADMIN PROFILE -->
+
+    <div class="admin-profile">
+
+        <div class="profile-circle">
+            A
+        </div>
+
+        <div class="profile-info">
+
+            <strong>
+                Platform Admin
+            </strong>
+
+            <span>
+                Administrator
+            </span>
+
+        </div>
+
+        <a href="{{ url_for('logout') }}"
+           class="logout-link">
+            Logout
+        </a>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     MAIN DASHBOARD
+===================================================== -->
+
+<main class="dashboard-container">
+
+
+    <!-- =================================================
+         FLASH MESSAGES
+    ================================================= -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="dashboard-alert {{ category }}">
+
+                    <span>
+                        {{ message }}
+                    </span>
+
+                    <button
+                        type="button"
+                        onclick="this.parentElement.remove()">
+
+                        ×
+
+                    </button>
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+
+    <!-- =================================================
+         HEADER
+    ================================================= -->
+
+    <section class="dashboard-header">
+
+        <div>
+
+            <span class="small-label">
+                PLATFORM ADMINISTRATION
+            </span>
+
+            <h1>
+                Platform Overview
+            </h1>
+
+            <p>
+                Manage colleges, users and platform activities.
+            </p>
+
+        </div>
+
+
+        <div class="header-actions">
+
+            <a href="{{ url_for('admin_colleges') }}"
+               class="primary-small-button">
+
+                Manage Colleges
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         STATISTICS
+    ================================================= -->
+
+    <section class="stats-grid">
+
+
+        <!-- TOTAL COLLEGES -->
+
+        <div class="stat-card">
+
+            <div>
+
+                <span class="stat-title">
+                    TOTAL COLLEGES
+                </span>
+
+                <strong class="stat-number">
+                    {{ total_colleges }}
+                </strong>
+
+            </div>
+
+            <div class="stat-icon">
+                C
+            </div>
+
+        </div>
+
+
+        <!-- PENDING COLLEGES -->
+
+        <div class="stat-card">
+
+            <div>
+
+                <span class="stat-title">
+                    PENDING COLLEGES
+                </span>
+
+                <strong class="stat-number">
+                    {{ pending_colleges }}
+                </strong>
+
+            </div>
+
+            <div class="stat-icon">
+                !
+            </div>
+
+        </div>
+
+
+        <!-- APPROVED COLLEGES -->
+
+        <div class="stat-card">
+
+            <div>
+
+                <span class="stat-title">
+                    APPROVED COLLEGES
+                </span>
+
+                <strong class="stat-number">
+                    {{ approved_colleges }}
+                </strong>
+
+            </div>
+
+            <div class="stat-icon">
+                ✓
+            </div>
+
+        </div>
+
+
+        <!-- TOTAL STUDENTS -->
+
+        <div class="stat-card">
+
+            <div>
+
+                <span class="stat-title">
+                    TOTAL STUDENTS
+                </span>
+
+                <strong class="stat-number">
+                    {{ total_students }}
+                </strong>
+
+            </div>
+
+            <div class="stat-icon">
+                S
+            </div>
+
+        </div>
+
+
+        <!-- TOTAL ALUMNI -->
+
+        <div class="stat-card">
+
+            <div>
+
+                <span class="stat-title">
+                    TOTAL ALUMNI
+                </span>
+
+                <strong class="stat-number">
+                    {{ total_alumni }}
+                </strong>
+
+            </div>
+
+            <div class="stat-icon">
+                A
+            </div>
+
+        </div>
+
+
+        <!-- REGISTERED USERS -->
+
+        <div class="stat-card">
+
+            <div>
+
+                <span class="stat-title">
+                    REGISTERED USERS
+                </span>
+
+                <strong class="stat-number">
+                    {{ total_users }}
+                </strong>
+
+            </div>
+
+            <div class="stat-icon">
+                U
+            </div>
+
+        </div>
+
+
+        <!-- ACTIVE USERS -->
+
+        <div class="stat-card">
+
+            <div>
+
+                <span class="stat-title">
+                    ACTIVE USERS
+                </span>
+
+                <strong class="stat-number">
+                    {{ active_users }}
+                </strong>
+
+            </div>
+
+            <div class="stat-icon">
+                ✓
+            </div>
+
+        </div>
+
+
+        <!-- CONNECTIONS -->
+
+        <div class="stat-card">
+
+            <div>
+
+                <span class="stat-title">
+                    CONNECTIONS
+                </span>
+
+                <strong class="stat-number">
+                    {{ total_connections }}
+                </strong>
+
+            </div>
+
+            <div class="stat-icon">
+                N
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         PENDING COLLEGES + RECENT ACTIVITY
+    ================================================= -->
+
+    <div class="dashboard-two-column">
+
+
+        <!-- =============================================
+             PENDING COLLEGES
+        ============================================== -->
+
+        <section class="dashboard-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <h2>
+                        Colleges Awaiting Approval
+                    </h2>
+
+                    <p>
+                        Review recently registered colleges.
+                    </p>
+
+                </div>
+
+
+                <a href="{{ url_for('admin_colleges') }}"
+                   class="view-all">
+
+                    View All
+
+                </a>
+
+            </div>
+
+
+            <div class="pending-list">
+
+
+                {% if pending_college_list %}
+
+
+                    {% for college in pending_college_list %}
+
+
+                        <div class="pending-item">
+
+
+                            <div class="college-info">
+
+                                <strong>
+
+                                    {{ college.get(
+                                        "college_name",
+                                        "College"
+                                    ) }}
+
+                                </strong>
+
+
+                                <span>
+
+                                    {{ college.get(
+                                        "college_code",
+                                        "No code"
+                                    ) }}
+
+
+                                    {% if college.get("city") %}
+
+                                        • {{ college.get("city") }}
+
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+
+
+                            <div class="college-actions">
+
+
+                                <!-- VIEW -->
+
+                                <a href="{{ url_for(
+                                    'admin_college_details',
+                                    college_id=college['_id']
+                                ) }}"
+                                   class="details-btn">
+
+                                    View
+
+                                </a>
+
+
+                                <!-- APPROVE -->
+
+                                <a href="{{ url_for(
+                                    'approve_college',
+                                    college_id=college['_id']
+                                ) }}"
+                                   class="approve-btn">
+
+                                    Approve
+
+                                </a>
+
+
+                                <!-- REJECT -->
+
+                                <a href="{{ url_for(
+                                    'reject_college',
+                                    college_id=college['_id']
+                                ) }}"
+                                   class="reject-btn">
+
+                                    Reject
+
+                                </a>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    {% endfor %}
+
+
+                {% else %}
+
+
+                    <div class="empty-state">
+
+                        <h3>
+                            No Pending Colleges
+                        </h3>
+
+                        <p>
+                            All college registrations
+                            have been reviewed.
+                        </p>
+
+                    </div>
+
+
+                {% endif %}
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =============================================
+             RECENT ACTIVITY
+        ============================================== -->
+
+        <section class="dashboard-panel">
+
+
+            <div class="panel-header">
+
+                <div>
+
+                    <h2>
+                        Recent System Activity
+                    </h2>
+
+                    <p>
+                        Latest activity on the portal.
+                    </p>
+
+                </div>
+
+
+                <a href="{{ url_for('admin_audit_logs') }}"
+                   class="view-all">
+
+                    View Logs
+
+                </a>
+
+            </div>
+
+
+
+            <div class="activity-list">
+
+
+                {% if recent_activities %}
+
+
+                    {% for activity in recent_activities %}
+
+
+                        <div class="activity-item">
+
+
+                            <div class="activity-icon">
+                                A
+                            </div>
+
+
+                            <div class="activity-content">
+
+
+                                <strong>
+
+                                    {{ activity.get(
+                                        "action",
+                                        "System Activity"
+                                    ) }}
+
+                                </strong>
+
+
+                                <p>
+
+                                    {{ activity.get(
+                                        "description",
+                                        "Activity recorded."
+                                    ) }}
+
+                                </p>
+
+
+                                <span class="activity-time">
+
+
+                                    {% if activity.get("created_at") %}
+
+
+                                        {{ activity.get(
+                                            "created_at"
+                                        ).strftime(
+                                            "%d %b %Y, %I:%M %p"
+                                        ) }}
+
+
+                                    {% else %}
+
+
+                                        Recently
+
+
+                                    {% endif %}
+
+
+                                </span>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    {% endfor %}
+
+
+                {% else %}
+
+
+                    <div class="empty-state">
+
+                        <h3>
+                            No Recent Activity
+                        </h3>
+
+                        <p>
+                            System activity will appear here.
+                        </p>
+
+                    </div>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+        </section>
+
+
+    </div>
+
+
+
+    <!-- =================================================
+         QUICK ACTIONS
+    ================================================= -->
+
+    <section class="dashboard-panel quick-panel">
+
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>
+                    Quick Actions
+                </h2>
+
+                <p>
+                    Manage the College Alumni Portal.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="quick-actions">
+
+
+            <!-- MANAGE COLLEGES -->
+
+            <a href="{{ url_for('admin_colleges') }}"
+               class="quick-action">
+
+
+                <div class="quick-icon blue-icon">
+                    C
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Manage Colleges
+                    </strong>
+
+                    <span>
+                        Review registrations
+                    </span>
+
+                </div>
+
+
+            </a>
+
+
+
+            <!-- MANAGE USERS -->
+
+            <a href="{{ url_for('admin_users') }}"
+               class="quick-action">
+
+
+                <div class="quick-icon purple-icon">
+                    U
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Manage Users
+                    </strong>
+
+                    <span>
+                        View registered users
+                    </span>
+
+                </div>
+
+
+            </a>
+
+
+
+            <!-- BROADCAST -->
+
+            <a href="{{ url_for('admin_broadcast') }}"
+               class="quick-action">
+
+
+                <div class="quick-icon green-icon">
+                    B
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Broadcast Announcement
+                    </strong>
+
+                    <span>
+                        Send platform announcements
+                    </span>
+
+                </div>
+
+
+            </a>
+
+
+
+            <!-- AUDIT LOG -->
+
+            <a href="{{ url_for('admin_audit_logs') }}"
+               class="quick-action">
+
+
+                <div class="quick-icon orange-icon">
+                    L
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Audit Logs
+                    </strong>
+
+                    <span>
+                        View system activity
+                    </span>
+
+                </div>
+
+
+            </a>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         REGISTERED COLLEGES
+    ================================================= -->
+
+    <section class="dashboard-panel">
+
+
+        <div class="panel-header">
+
+
+            <div>
+
+                <h2>
+                    Registered Colleges
+                </h2>
+
+                <p>
+                    Recently registered colleges on the platform.
+                </p>
+
+            </div>
+
+
+            <a href="{{ url_for('admin_colleges') }}"
+               class="view-all">
+
+                Manage Colleges
+
+            </a>
+
+
+        </div>
+
+
+
+        <div class="table-wrapper">
+
+
+            {% if recent_colleges %}
+
+
+                <table class="college-table">
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                College
+                            </th>
+
+                            <th>
+                                Code
+                            </th>
+
+                            <th>
+                                Location
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <tbody>
+
+
+                        {% for college in recent_colleges %}
+
+
+                            <tr>
+
+
+                                <!-- COLLEGE -->
+
+                                <td>
+
+                                    <strong>
+
+                                        {{ college.get(
+                                            "college_name",
+                                            "College"
+                                        ) }}
+
+                                    </strong>
+
+                                </td>
+
+
+                                <!-- CODE -->
+
+                                <td>
+
+                                    {{ college.get(
+                                        "college_code",
+                                        "-"
+                                    ) }}
+
+                                </td>
+
+
+                                <!-- LOCATION -->
+
+                                <td>
+
+                                    {{ college.get(
+                                        "city",
+                                        "-"
+                                    ) }}
+
+                                </td>
+
+
+                                <!-- STATUS -->
+
+                                <td>
+
+
+                                    {% set status =
+                                        college.get(
+                                            "status",
+                                            "Pending"
+                                        )
+                                    %}
+
+
+                                    <span class="status-badge
+
+                                        {% if status == 'Approved' %}
+
+                                            status-approved
+
+                                        {% elif status == 'Rejected' %}
+
+                                            status-rejected
+
+                                        {% else %}
+
+                                            status-pending
+
+                                        {% endif %}
+
+                                    ">
+
+                                        {{ status }}
+
+                                    </span>
+
+
+                                </td>
+
+
+                                <!-- ACTION -->
+
+                                <td>
+
+
+                                    <a href="{{ url_for(
+                                        'admin_college_details',
+                                        college_id=college['_id']
+                                    ) }}"
+                                       class="details-btn">
+
+                                        View
+
+                                    </a>
+
+
+                                </td>
+
+
+                            </tr>
+
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            {% else %}
+
+
+                <div class="empty-state">
+
+                    <h3>
+                        No Colleges Registered
+                    </h3>
+
+                    <p>
+                        Registered colleges will appear here.
+                    </p>
+
+                </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+</body>
+
+</html>

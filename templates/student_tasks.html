@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Tasks - College Alumni Portal</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        body {
+            margin: 0;
+            background: #f5f7fb;
+            color: #14213d;
+            font-family: Arial, sans-serif;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .student-navbar {
+            height: 72px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 28px;
+        }
+
+        .portal-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #10243e;
+        }
+
+        .student-nav {
+            display: flex;
+            align-items: center;
+            gap: 27px;
+        }
+
+        .student-nav a {
+            text-decoration: none;
+            color: #344054;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            padding: 26px 0 23px;
+
+            border-bottom: 3px solid transparent;
+        }
+
+        .student-nav a:hover {
+            color: #4f35e8;
+        }
+
+        .student-nav a.active {
+            color: #4f35e8;
+            border-bottom-color: #4f35e8;
+        }
+
+        .student-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .student-avatar {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 50%;
+
+            background: #5138ee;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: 700;
+        }
+
+        .student-details strong {
+            display: block;
+            font-size: 13px;
+        }
+
+        .student-details span {
+            font-size: 11px;
+            color: #667085;
+        }
+
+        .logout-link {
+            text-decoration: none;
+            color: #667085;
+            font-size: 13px;
+            margin-left: 12px;
+        }
+
+
+        /* ================= PAGE ================= */
+
+        .page-container {
+            max-width: 1450px;
+
+            margin: auto;
+
+            padding: 32px 42px 70px;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+
+            margin-bottom: 28px;
+        }
+
+        .page-header h1 {
+            margin: 0;
+
+            font-size: 30px;
+
+            color: #172b4d;
+        }
+
+        .page-header p {
+            margin: 7px 0 0;
+
+            color: #667085;
+
+            font-size: 14px;
+        }
+
+
+        /* ================= ADD TASK ================= */
+
+        .add-task-btn {
+            display: inline-block;
+
+            background: #4f35e8;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 11px 18px;
+
+            border-radius: 6px;
+
+            font-size: 13px;
+
+            font-weight: 600;
+        }
+
+        .add-task-btn:hover {
+            background: #4129d3;
+        }
+
+
+        /* ================= TASK BOARD ================= */
+
+        .task-board {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+            gap: 22px;
+        }
+
+
+        /* ================= COLUMN ================= */
+
+        .task-column {
+
+            background: white;
+
+            border: 1px solid #dfe3ea;
+
+            border-radius: 10px;
+
+            min-height: 300px;
+
+            overflow: hidden;
+        }
+
+        .column-header {
+
+            padding: 18px 20px;
+
+            border-bottom: 1px solid #e5e7eb;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+        .column-title {
+
+            font-size: 17px;
+
+            font-weight: 700;
+
+            color: #172b4d;
+        }
+
+        .column-count {
+
+            min-width: 28px;
+
+            height: 28px;
+
+            border-radius: 50%;
+
+            background: #f1efff;
+
+            color: #4f35e8;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+
+        /* ================= TASK LIST ================= */
+
+        .task-list {
+
+            padding: 16px;
+        }
+
+
+        /* ================= TASK CARD ================= */
+
+        .task-card {
+
+            border: 1px solid #dfe3ea;
+
+            border-radius: 8px;
+
+            padding: 16px;
+
+            margin-bottom: 14px;
+
+            background: #ffffff;
+
+            box-shadow:
+                0 2px 8px rgba(16, 24, 40, 0.04);
+        }
+
+        .task-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .task-title {
+
+            margin: 0 0 7px;
+
+            font-size: 15px;
+
+            color: #172b4d;
+        }
+
+        .task-description {
+
+            margin: 0;
+
+            color: #667085;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+        }
+
+        .task-due {
+
+            margin-top: 12px;
+
+            padding-top: 10px;
+
+            border-top: 1px solid #eaecf0;
+
+            color: #667085;
+
+            font-size: 12px;
+        }
+
+
+        /* ================= ACTIONS ================= */
+
+        .task-actions {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-top: 14px;
+        }
+
+        .task-btn {
+
+            display: inline-block;
+
+            text-decoration: none;
+
+            padding: 7px 12px;
+
+            border-radius: 5px;
+
+            font-size: 12px;
+
+            font-weight: 600;
+        }
+
+        .start-btn {
+
+            color: #4f35e8;
+
+            border: 1px solid #4f35e8;
+
+            background: white;
+        }
+
+        .start-btn:hover {
+            background: #f3f1ff;
+        }
+
+        .complete-btn {
+
+            color: white;
+
+            background: #159957;
+
+            border: 1px solid #159957;
+        }
+
+        .complete-btn:hover {
+            background: #117a45;
+        }
+
+        .delete-btn {
+
+            color: #e5484d;
+
+            text-decoration: none;
+
+            font-size: 12px;
+        }
+
+
+        /* ================= EMPTY ================= */
+
+        .empty-task {
+
+            padding: 55px 15px;
+
+            text-align: center;
+
+            color: #667085;
+
+            font-size: 13px;
+        }
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1000px) {
+
+            .task-board {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 700px) {
+
+            .student-navbar {
+
+                height: auto;
+
+                flex-wrap: wrap;
+
+                padding: 15px 20px;
+            }
+
+            .student-nav {
+
+                order: 3;
+
+                width: 100%;
+
+                overflow-x: auto;
+            }
+
+            .page-container {
+                padding: 25px 20px;
+            }
+
+            .page-header {
+                align-items: flex-start;
+
+                flex-direction: column;
+
+                gap: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="student-navbar">
+
+    <div class="portal-name">
+        College Alumni Portal
+    </div>
+
+
+    <nav class="student-nav">
+
+        <a href="{{ url_for('student_dashboard') }}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('find_alumni') }}">
+            Find Alumni
+        </a>
+
+        <a href="{{ url_for('student_connections') }}">
+            Connections
+        </a>
+
+        <a href="{{ url_for('messages') }}">
+            Messages
+        </a>
+
+        <a href="{{ url_for('student_mentorship') }}">
+            Mentorship
+        </a>
+
+        <a href="{{ url_for('student_tasks') }}"
+           class="active">
+            Tasks
+        </a>
+
+    </nav>
+
+
+    <div class="student-profile">
+
+        <div class="student-avatar">
+
+            {{ student.get("full_name", "S")[0]|upper }}
+
+        </div>
+
+        <div class="student-details">
+
+            <strong>
+                {{ student.get("full_name", "Student") }}
+            </strong>
+
+            <span>
+                Student
+            </span>
+
+        </div>
+
+        <a href="{{ url_for('logout') }}"
+           class="logout-link">
+
+            Logout
+
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- ================= PAGE ================= -->
+
+<main class="page-container">
+
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>
+                Tasks
+            </h1>
+
+            <p>
+                Track placement preparation, mentorship activities
+                and tasks assigned by your mentors.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= BOARD ================= -->
+
+    <div class="task-board">
+
+
+        <!-- PENDING -->
+
+        <section class="task-column">
+
+            <div class="column-header">
+
+                <div class="column-title">
+                    Pending
+                </div>
+
+                <div class="column-count">
+                    {{ pending_tasks|length }}
+                </div>
+
+            </div>
+
+
+            <div class="task-list">
+
+                {% if pending_tasks %}
+
+                    {% for task in pending_tasks %}
+
+                    <div class="task-card">
+
+                        <h3 class="task-title">
+
+                            {{ task.get(
+                                "title",
+                                "Untitled Task"
+                            ) }}
+
+                        </h3>
+
+
+                        {% if task.get("description") %}
+
+                        <p class="task-description">
+
+                            {{ task.get("description") }}
+
+                        </p>
+
+                        {% endif %}
+
+
+                        {% if task.get("due_date") %}
+
+                        <div class="task-due">
+
+                            Due:
+                            {{ task.get("due_date") }}
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <div class="task-actions">
+
+                            <a href="{{ url_for(
+                                'start_task',
+                                task_id=task['_id']
+                            ) }}"
+                               class="task-btn start-btn">
+
+                                Start Task
+
+                            </a>
+
+
+                            <a href="{{ url_for(
+                                'delete_task',
+                                task_id=task['_id']
+                            ) }}"
+                               class="delete-btn">
+
+                                Delete
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="empty-task">
+
+                        No pending tasks.
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+        <!-- IN PROGRESS -->
+
+        <section class="task-column">
+
+            <div class="column-header">
+
+                <div class="column-title">
+                    In Progress
+                </div>
+
+                <div class="column-count">
+                    {{ in_progress_tasks|length }}
+                </div>
+
+            </div>
+
+
+            <div class="task-list">
+
+                {% if in_progress_tasks %}
+
+                    {% for task in in_progress_tasks %}
+
+                    <div class="task-card">
+
+                        <h3 class="task-title">
+
+                            {{ task.get(
+                                "title",
+                                "Untitled Task"
+                            ) }}
+
+                        </h3>
+
+
+                        {% if task.get("description") %}
+
+                        <p class="task-description">
+
+                            {{ task.get("description") }}
+
+                        </p>
+
+                        {% endif %}
+
+
+                        {% if task.get("due_date") %}
+
+                        <div class="task-due">
+
+                            Due:
+                            {{ task.get("due_date") }}
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <div class="task-actions">
+
+                            <a href="{{ url_for(
+                                'complete_task',
+                                task_id=task['_id']
+                            ) }}"
+                               class="task-btn complete-btn">
+
+                                Mark Complete
+
+                            </a>
+
+
+                            <a href="{{ url_for(
+                                'delete_task',
+                                task_id=task['_id']
+                            ) }}"
+                               class="delete-btn">
+
+                                Delete
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="empty-task">
+
+                        No tasks in progress.
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+        <!-- COMPLETED -->
+
+        <section class="task-column">
+
+            <div class="column-header">
+
+                <div class="column-title">
+                    Completed
+                </div>
+
+                <div class="column-count">
+                    {{ completed_tasks|length }}
+                </div>
+
+            </div>
+
+
+            <div class="task-list">
+
+                {% if completed_tasks %}
+
+                    {% for task in completed_tasks %}
+
+                    <div class="task-card">
+
+                        <h3 class="task-title">
+
+                            {{ task.get(
+                                "title",
+                                "Untitled Task"
+                            ) }}
+
+                        </h3>
+
+
+                        {% if task.get("description") %}
+
+                        <p class="task-description">
+
+                            {{ task.get("description") }}
+
+                        </p>
+
+                        {% endif %}
+
+
+                        {% if task.get("due_date") %}
+
+                        <div class="task-due">
+
+                            Completed task
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <div class="task-actions">
+
+                            <a href="{{ url_for(
+                                'delete_task',
+                                task_id=task['_id']
+                            ) }}"
+                               class="delete-btn">
+
+                                Delete
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="empty-task">
+
+                        No completed tasks yet.
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+
+</main>
+
+
+</body>
+
+</html>

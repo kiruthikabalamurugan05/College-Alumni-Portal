@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Mentorship - College Alumni Portal</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f5f7fb;
+            color: #14213d;
+            font-family: Arial, sans-serif;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .student-navbar {
+            height: 72px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 28px;
+        }
+
+        .portal-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #10243e;
+            white-space: nowrap;
+        }
+
+        .student-nav {
+            display: flex;
+            align-items: center;
+            gap: 27px;
+            height: 100%;
+        }
+
+        .student-nav a {
+            text-decoration: none;
+            color: #344054;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            padding: 26px 0 23px;
+
+            border-bottom: 3px solid transparent;
+        }
+
+        .student-nav a:hover {
+            color: #4f35e8;
+        }
+
+        .student-nav a.active {
+            color: #4f35e8;
+            border-bottom-color: #4f35e8;
+        }
+
+        .student-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .student-avatar {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 50%;
+
+            background: #5138ee;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .student-details strong {
+            display: block;
+            font-size: 13px;
+            color: #172b4d;
+        }
+
+        .student-details span {
+            display: block;
+            font-size: 11px;
+            color: #667085;
+            margin-top: 2px;
+        }
+
+        .logout-link {
+            text-decoration: none;
+            color: #667085;
+
+            font-size: 13px;
+            margin-left: 12px;
+        }
+
+        .logout-link:hover {
+            color: #4f35e8;
+        }
+
+
+        /* =========================
+           PAGE
+        ========================= */
+
+        .page-container {
+            max-width: 1450px;
+            margin: auto;
+            padding: 32px 42px 70px;
+        }
+
+
+        /* =========================
+           PAGE HEADER
+        ========================= */
+
+        .page-header {
+            margin-bottom: 26px;
+        }
+
+        .page-header h1 {
+            margin: 0;
+
+            font-size: 30px;
+            font-weight: 700;
+
+            color: #172b4d;
+        }
+
+        .page-header p {
+            margin: 7px 0 0;
+
+            color: #667085;
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           MAIN SECTION
+        ========================= */
+
+        .mentorship-section {
+            background: white;
+
+            border: 1px solid #dfe3ea;
+            border-radius: 10px;
+
+            padding: 22px;
+        }
+
+        .section-title {
+            margin-bottom: 20px;
+        }
+
+        .section-title h2 {
+            margin: 0;
+
+            font-size: 20px;
+            font-weight: 700;
+
+            color: #172b4d;
+        }
+
+        .section-title p {
+            margin: 6px 0 0;
+
+            font-size: 13px;
+            color: #667085;
+        }
+
+
+        /* =========================
+           MENTOR GRID
+        ========================= */
+
+        .mentor-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+            gap: 20px;
+        }
+
+
+        /* =========================
+           MENTOR CARD
+        ========================= */
+
+        .mentor-card {
+            border: 1px solid #dfe3ea;
+
+            border-radius: 10px;
+
+            padding: 22px;
+
+            text-align: center;
+
+            background: white;
+
+            box-shadow:
+                0 3px 10px rgba(16, 24, 40, 0.05);
+        }
+
+        .mentor-avatar {
+            width: 70px;
+            height: 70px;
+
+            margin: 0 auto 12px;
+
+            border-radius: 50%;
+
+            background: #5138ee;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 25px;
+            font-weight: 700;
+        }
+
+        .mentor-card h3 {
+            margin: 0;
+
+            font-size: 18px;
+            font-weight: 700;
+
+            color: #172b4d;
+        }
+
+        .mentor-job {
+            display: block;
+
+            margin-top: 6px;
+
+            color: #4f35e8;
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .mentor-company {
+            display: block;
+
+            margin-top: 5px;
+
+            color: #667085;
+            font-size: 13px;
+        }
+
+        .mentor-batch {
+            margin-top: 8px;
+
+            color: #667085;
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           MENTOR AREAS
+        ========================= */
+
+        .mentor-areas {
+            display: flex;
+
+            justify-content: center;
+
+            flex-wrap: wrap;
+
+            gap: 7px;
+
+            margin: 15px 0;
+        }
+
+        .area {
+            border: 1px solid #d0d5dd;
+
+            background: #f8f9fc;
+
+            border-radius: 5px;
+
+            padding: 5px 9px;
+
+            font-size: 11px;
+
+            color: #344054;
+        }
+
+
+        /* =========================
+           BUTTON
+        ========================= */
+
+        .mentor-btn {
+            display: block;
+
+            width: 100%;
+
+            box-sizing: border-box;
+
+            padding: 10px;
+
+            border-radius: 6px;
+
+            text-decoration: none;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            border: 1px solid #4f35e8;
+
+            color: #4f35e8;
+
+            background: white;
+        }
+
+        .mentor-btn:hover {
+            background: #f3f1ff;
+        }
+
+        .mentor-btn.requested {
+            border-color: #98a2b3;
+            color: #667085;
+            pointer-events: none;
+        }
+
+        .mentor-btn.accepted {
+            border-color: #159957;
+            color: #159957;
+            pointer-events: none;
+        }
+
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .empty-state {
+            padding: 60px 20px;
+
+            text-align: center;
+
+            border: 1px dashed #d0d5dd;
+
+            border-radius: 8px;
+
+            color: #667085;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1100px) {
+
+            .student-navbar {
+                padding: 0 20px;
+            }
+
+            .student-nav {
+                gap: 16px;
+            }
+
+            .mentor-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+
+        @media (max-width: 800px) {
+
+            .student-navbar {
+                height: auto;
+
+                flex-wrap: wrap;
+
+                padding: 15px 20px;
+            }
+
+            .portal-name {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .student-nav {
+                order: 2;
+
+                width: 100%;
+
+                overflow-x: auto;
+
+                gap: 20px;
+            }
+
+            .student-nav a {
+                padding: 12px 0;
+                white-space: nowrap;
+            }
+
+            .student-profile {
+                position: absolute;
+                right: 20px;
+                top: 12px;
+            }
+
+            .student-details,
+            .logout-link {
+                display: none;
+            }
+
+            .page-container {
+                padding: 25px 20px 50px;
+            }
+
+            .mentor-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         SINGLE NAVBAR
+         ===================================================== -->
+
+    <header class="student-navbar">
+
+        <!-- Logo / Portal Name -->
+        <div class="portal-name">
+            College Alumni Portal
+        </div>
+
+
+        <!-- Navigation -->
+        <nav class="student-nav">
+
+            <a href="{{ url_for('student_dashboard') }}">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('find_alumni') }}">
+                Find Alumni
+            </a>
+
+            <a href="{{ url_for('student_connections') }}">
+                Connections
+            </a>
+
+            <a href="{{ url_for('messages') }}">
+                Messages
+            </a>
+
+            <a href="{{ url_for('student_mentorship') }}"
+               class="active">
+                Mentorship
+            </a>
+
+            <a href="{{ url_for('student_tasks') }}">
+                Tasks
+            </a>
+
+        </nav>
+
+
+        <!-- Student Profile -->
+        <div class="student-profile">
+
+            <div class="student-avatar">
+
+                {{ student.get("full_name", "S")[0]|upper }}
+
+            </div>
+
+
+            <div class="student-details">
+
+                <strong>
+                    {{ student.get("full_name", "Student") }}
+                </strong>
+
+                <span>
+                    Student
+                </span>
+
+            </div>
+
+
+            <a href="{{ url_for('logout') }}"
+               class="logout-link">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         PAGE CONTENT
+         ===================================================== -->
+
+    <main class="page-container">
+
+
+        <!-- Page Heading -->
+
+        <div class="page-header">
+
+            <h1>
+                Mentorship
+            </h1>
+
+            <p>
+                Connect with experienced alumni for career guidance,
+                technical skills and placement preparation.
+            </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             MENTORS SECTION
+             ================================================= -->
+
+        <section class="mentorship-section">
+
+
+            <div class="section-title">
+
+                <h2>
+                    Verified Alumni Mentors
+                </h2>
+
+                <p>
+                    Alumni from
+                    {{ college.get("college_name", "your college") }}
+                    who are available for mentorship.
+                </p>
+
+            </div>
+
+
+
+            {% if mentors %}
+
+
+                <div class="mentor-grid">
+
+
+                    {% for mentor in mentors %}
+
+
+                        <div class="mentor-card">
+
+
+                            <!-- Avatar -->
+
+                            <div class="mentor-avatar">
+
+                                {{ mentor.get(
+                                    "full_name",
+                                    "A"
+                                )[0]|upper }}
+
+                            </div>
+
+
+                            <!-- Name -->
+
+                            <h3>
+
+                                {{ mentor.get(
+                                    "full_name",
+                                    "Alumni"
+                                ) }}
+
+                            </h3>
+
+
+                            <!-- Job -->
+
+                            <span class="mentor-job">
+
+                                {{ mentor.get(
+                                    "job_title",
+                                    "Professional"
+                                ) }}
+
+                            </span>
+
+
+                            <!-- Company -->
+
+                            <span class="mentor-company">
+
+                                {{ mentor.get(
+                                    "company",
+                                    "Company"
+                                ) }}
+
+                            </span>
+
+
+                            <!-- Batch -->
+
+                            {% if mentor.get("batch") %}
+
+                                <div class="mentor-batch">
+
+                                    Batch
+                                    {{ mentor.get("batch") }}
+
+                                </div>
+
+                            {% endif %}
+
+
+
+                            <!-- Mentorship Areas -->
+
+                            {% if mentor.get("mentor_areas") %}
+    <div class="mentor-areas">
+
+        {% if mentor.get("mentor_areas") is string %}
+
+            {% for area in mentor.get("mentor_areas").split(",") %}
+                {% if area.strip() %}
+                    <span class="area">
+                        {{ area.strip() }}
+                    </span>
+                {% endif %}
+            {% endfor %}
+
+        {% else %}
+
+            {% for area in mentor.get("mentor_areas", []) %}
+                {% if area %}
+                    <span class="area">
+                        {{ area }}
+                    </span>
+                {% endif %}
+            {% endfor %}
+
+        {% endif %}
+
+    </div>
+{% endif %}
+
+
+                            <!-- Request Status -->
+
+                            {% set status = mentor.get(
+                                "mentorship_status"
+                            ) %}
+
+
+                            {% if status == "Pending" %}
+
+                                <a class="mentor-btn requested">
+
+                                    Request Pending
+
+                                </a>
+
+
+                            {% elif status == "Accepted" %}
+
+                                <a class="mentor-btn accepted">
+
+                                    Mentorship Accepted
+
+                                </a>
+
+
+                            {% else %}
+
+                                <a
+                                    href="{{ url_for(
+                                        'request_mentorship',
+                                        alumni_id=mentor['_id']
+                                    ) }}"
+                                    class="mentor-btn"
+                                >
+
+                                    Request Mentorship
+
+                                </a>
+
+                            {% endif %}
+
+
+                        </div>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <!-- No mentors -->
+
+                <div class="empty-state">
+
+                    No approved alumni mentors are available yet.
+
+                </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+    </main>
+
+
+</body>
+
+</html>

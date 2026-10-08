@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Register Alumni - Alumni Portal</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+<div class="page">
+
+    <div class="alumni-form-card">
+
+
+        <!-- HEADER -->
+
+        <div class="alumni-form-header">
+
+            <h1>Alumni Account Registration</h1>
+
+            <p>
+                Join your college's alumni network and connect with students and peers.
+            </p>
+
+        </div>
+
+
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+
+            <!-- =====================================
+                 SELECT COLLEGE
+            ====================================== -->
+
+            <div class="form-section">
+
+                <h2>Select College</h2>
+
+
+                <div class="form-group full-width">
+
+                    <label>
+                        Your College
+                        <span>*</span>
+                    </label>
+
+                    <select
+                        name="college_id"
+                        required
+                    >
+
+                        <option value="">
+                            -- Select Your Graduated College --
+                        </option>
+
+                        {% for college in colleges %}
+
+                        <option value="{{ college._id }}">
+                            {{ college.college_name }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =====================================
+                 PERSONAL INFORMATION
+            ====================================== -->
+
+            <div class="form-section">
+
+                <h2>Personal Information</h2>
+
+
+                <div class="form-grid">
+
+
+                    <!-- Full Name -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Full Name
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="full_name"
+                            placeholder="Enter your full name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Email -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Email Address
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="yourname@company.com"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Password -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Password
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="Create password"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Confirm Password -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Confirm Password
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="password"
+                            name="confirm_password"
+                            placeholder="Confirm password"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Phone -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Phone Number
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="tel"
+                            name="phone"
+                            placeholder="+91 9876543210"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Gender -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Gender
+                        </label>
+
+                        <select name="gender">
+
+                            <option value="">
+                                Select Gender
+                            </option>
+
+                            <option value="Male">
+                                Male
+                            </option>
+
+                            <option value="Female">
+                                Female
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Current Location -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Current Location / City
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="current_location"
+                            placeholder="e.g. Chennai, India"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Profile Photo -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Profile Photo
+                        </label>
+
+                        <input
+                            type="file"
+                            name="profile_photo"
+                            accept="image/*"
+                        >
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =====================================
+                 ACADEMIC BACKGROUND
+            ====================================== -->
+
+            <div class="form-section">
+
+                <h2>Academic Background</h2>
+
+
+                <div class="form-grid">
+
+
+                    <!-- Register Number -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Register / Roll Number
+                        </label>
+
+                        <input
+                            type="text"
+                            name="register_number"
+                            placeholder="e.g. 2019IT045"
+                        >
+
+                    </div>
+
+
+                    <!-- Degree -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Degree Program
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="degree"
+                            placeholder="e.g. B.Tech / M.S."
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Department -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Department
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="department"
+                            placeholder="e.g. Information Technology"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Batch -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Batch
+                        </label>
+
+                        <input
+                            type="text"
+                            name="batch"
+                            placeholder="e.g. 2019-2023"
+                        >
+
+                    </div>
+
+
+                    <!-- Graduation Year -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Graduation Year
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="number"
+                            name="graduation_year"
+                            placeholder="e.g. 2023"
+                            min="1950"
+                            max="2100"
+                            required
+                        >
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =====================================
+                 PROFESSIONAL EXPERIENCE
+            ====================================== -->
+
+            <div class="form-section">
+
+                <h2>Professional Experience & Skills</h2>
+
+
+                <div class="form-grid">
+
+
+                    <!-- Company -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Current Company / Organization
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="company"
+                            placeholder="e.g. TCS / Google / Microsoft"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Job Title -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Job Title / Designation
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="job_title"
+                            placeholder="e.g. Software Engineer"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Industry -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Industry
+                        </label>
+
+                        <input
+                            type="text"
+                            name="industry"
+                            placeholder="e.g. IT & Software Services"
+                        >
+
+                    </div>
+
+
+                    <!-- Experience -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Total Experience (Years)
+                        </label>
+
+                        <input
+                            type="number"
+                            name="experience"
+                            placeholder="e.g. 3"
+                            min="0"
+                            step="0.5"
+                        >
+
+                    </div>
+
+
+                    <!-- Skills -->
+
+                    <div class="form-group full-width">
+
+                        <label>
+                            Key Skills
+                        </label>
+
+                        <input
+                            type="text"
+                            name="skills"
+                            placeholder="Python, Flask, MongoDB, Docker, Microservices"
+                        >
+
+                        <small class="field-help">
+                            Separate multiple skills using commas.
+                        </small>
+
+                    </div>
+
+
+                    <!-- LinkedIn -->
+
+                    <div class="form-group">
+
+                        <label>
+                            LinkedIn URL
+                        </label>
+
+                        <input
+                            type="url"
+                            name="linkedin"
+                            placeholder="https://linkedin.com/in/..."
+                        >
+
+                    </div>
+
+
+                    <!-- GitHub -->
+
+                    <div class="form-group">
+
+                        <label>
+                            GitHub URL
+                        </label>
+
+                        <input
+                            type="url"
+                            name="github"
+                            placeholder="https://github.com/..."
+                        >
+
+                    </div>
+
+
+                    <!-- Portfolio -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Portfolio URL
+                        </label>
+
+                        <input
+                            type="url"
+                            name="portfolio"
+                            placeholder="https://myportfolio.com"
+                        >
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =====================================
+                 MENTORSHIP
+            ====================================== -->
+
+            <div class="form-section">
+
+                <h2>Mentorship & Guidance</h2>
+
+
+                <div class="mentorship-area">
+
+
+                    <label>
+                        Available for Mentorship?
+                    </label>
+
+
+                    <div class="radio-group">
+
+                        <label class="radio-option">
+
+                            <input
+                                type="radio"
+                                name="mentorship"
+                                value="yes"
+                                checked
+                            >
+
+                            Yes, I am available to mentor students
+
+                        </label>
+
+
+                        <label class="radio-option">
+
+                            <input
+                                type="radio"
+                                name="mentorship"
+                                value="no"
+                            >
+
+                            Not right now
+
+                        </label>
+
+                    </div>
+
+
+
+                    <label class="mentor-label">
+                        Select Mentorship Areas
+                    </label>
+
+
+                    <div class="checkbox-grid">
+
+
+                        <label class="checkbox-option">
+
+                            <input
+                                type="checkbox"
+                                name="mentor_areas"
+                                value="Career Guidance"
+                            >
+
+                            Career Guidance
+
+                        </label>
+
+
+                        <label class="checkbox-option">
+
+                            <input
+                                type="checkbox"
+                                name="mentor_areas"
+                                value="Technical Skills"
+                            >
+
+                            Technical Skills
+
+                        </label>
+
+
+                        <label class="checkbox-option">
+
+                            <input
+                                type="checkbox"
+                                name="mentor_areas"
+                                value="Resume Review"
+                            >
+
+                            Resume Review
+
+                        </label>
+
+
+                        <label class="checkbox-option">
+
+                            <input
+                                type="checkbox"
+                                name="mentor_areas"
+                                value="Interview Preparation"
+                            >
+
+                            Interview Preparation
+
+                        </label>
+
+
+                        <label class="checkbox-option">
+
+                            <input
+                                type="checkbox"
+                                name="mentor_areas"
+                                value="Higher Studies"
+                            >
+
+                            Higher Studies
+
+                        </label>
+
+
+                        <label class="checkbox-option">
+
+                            <input
+                                type="checkbox"
+                                name="mentor_areas"
+                                value="Entrepreneurship"
+                            >
+
+                            Entrepreneurship
+
+                        </label>
+
+
+                        <label class="checkbox-option">
+
+                            <input
+                                type="checkbox"
+                                name="mentor_areas"
+                                value="Placement Guidance"
+                            >
+
+                            Placement Guidance
+
+                        </label>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =====================================
+                 APPROVAL INFO
+            ====================================== -->
+
+            <div class="alumni-registration-info">
+
+                <strong>Account Approval</strong>
+
+                <p>
+                    Your alumni account will require verification
+                    by your College Administrator before you can
+                    access the portal.
+                </p>
+
+            </div>
+
+
+
+            <!-- =====================================
+                 SUBMIT
+            ====================================== -->
+
+            <button
+                type="submit"
+                class="alumni-submit-button"
+            >
+                Submit Alumni Registration
+            </button>
+
+
+            <a
+                href="{{ url_for('home') }}"
+                class="back-home"
+            >
+                Back to Home
+            </a>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

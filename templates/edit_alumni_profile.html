@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Alumni Profile</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="portal-navbar">
+
+    <div class="portal-logo">
+        College Alumni Portal
+    </div>
+
+    <div class="portal-nav-links">
+
+        <a href="{{ url_for('home') }}">
+            Home
+        </a>
+
+        <a href="{{ url_for('alumni_dashboard') }}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('alumni_dashboard') }}#connections">
+            Connections
+        </a>
+
+        <a href="{{ url_for('alumni_dashboard') }}#mentorship">
+            Mentorship
+        </a>
+
+        <a href="{{ url_for('edit_alumni_profile') }}"
+           class="active">
+            Profile
+        </a>
+
+        <a href="{{ url_for('logout') }}">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= PAGE ================= -->
+
+<main class="edit-profile-page">
+
+    <div class="edit-profile-header">
+
+        <p>
+            ALUMNI PROFILE
+        </p>
+
+        <h1>
+            Edit Your Profile
+        </h1>
+
+        <span>
+            Keep your professional information updated
+            so students can connect with you.
+        </span>
+
+    </div>
+
+
+    <!-- ================= FORM ================= -->
+
+    <form method="POST"
+          action="{{ url_for('edit_alumni_profile') }}"
+          class="edit-profile-form">
+
+
+        <!-- PERSONAL INFORMATION -->
+
+        <section class="edit-profile-section">
+
+            <div class="edit-section-title">
+
+                <h2>
+                    Personal Information
+                </h2>
+
+                <p>
+                    Basic information about you.
+                </p>
+
+            </div>
+
+
+            <div class="edit-form-grid">
+
+
+                <div class="edit-form-group">
+
+                    <label>
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="full_name"
+                        value="{{ alumni.get('full_name', '') }}"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="edit-form-group">
+
+                    <label>
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        value="{{ alumni.get('email', '') }}"
+                        disabled
+                    >
+
+                    <small>
+                        Email cannot be changed.
+                    </small>
+
+                </div>
+
+
+                <div class="edit-form-group">
+
+                    <label>
+                        Phone
+                    </label>
+
+                    <input
+                        type="text"
+                        name="phone"
+                        value="{{ alumni.get('phone', '') }}"
+                    >
+
+                </div>
+
+
+                <div class="edit-form-group">
+
+                    <label>
+                        Current Location
+                    </label>
+
+                    <input
+                        type="text"
+                        name="current_location"
+                        value="{{ alumni.get('current_location', '') }}"
+                        placeholder="Example: Chennai"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ACADEMIC INFORMATION -->
+
+        <section class="edit-profile-section">
+
+            <div class="edit-section-title">
+
+                <h2>
+                    Academic Information
+                </h2>
+
+                <p>
+                    Your college and graduation details.
+                </p>
+
+            </div>
+
+
+            <div class="edit-form-grid">
+
+
+                <div class="edit-form-group">
+
+                    <label>
+                        Department
+                    </label>
+
+                    <input
+                        type="text"
+                        name="department"
+                        value="{{ alumni.get('department', '') }}"
+                        placeholder="Example: Information Technology"
+                    >
+
+                </div>
+
+
+                <div class="edit-form-group">
+
+                    <label>
+                        Degree
+                    </label>
+
+                    <input
+                        type="text"
+                        name="degree"
+                        value="{{ alumni.get('degree', '') }}"
+                        placeholder="Example: B.Tech"
+                    >
+
+                </div>
+
+
+                <div class="edit-form-group">
+
+                    <label>
+                        Graduation Year / Batch
+                    </label>
+
+                    <input
+                        type="text"
+                        name="graduation_year"
+                        value="{{ alumni.get(
+                            'graduation_year',
+                            alumni.get('batch', '')
+                        ) }}"
+                        placeholder="Example: 2025"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- PROFESSIONAL INFORMATION -->
+
+        <section class="edit-profile-section">
+
+            <div class="edit-section-title">
+
+                <h2>
+                    Professional Information
+                </h2>
+
+                <p>
+                    Help students understand your professional
+                    background.
+                </p>
+
+            </div>
+
+
+            <div class="edit-form-grid">
+
+
+                <div class="edit-form-group">
+
+                    <label>
+                        Job Title
+                    </label>
+
+                    <input
+                        type="text"
+                        name="job_title"
+                        value="{{ alumni.get('job_title', '') }}"
+                        placeholder="Example: Software Engineer"
+                    >
+
+                </div>
+
+
+                <div class="edit-form-group">
+
+                    <label>
+                        Company
+                    </label>
+
+                    <input
+                        type="text"
+                        name="company"
+                        value="{{ alumni.get('company', '') }}"
+                        placeholder="Example: TCS"
+                    >
+
+                </div>
+
+
+                <div class="edit-form-group">
+
+                    <label>
+                        Industry
+                    </label>
+
+                    <input
+                        type="text"
+                        name="industry"
+                        value="{{ alumni.get('industry', '') }}"
+                        placeholder="Example: Information Technology"
+                    >
+
+                </div>
+
+
+                <div class="edit-form-group">
+
+                    <label>
+                        Experience
+                    </label>
+
+                    <input
+                        type="text"
+                        name="experience"
+                        value="{{ alumni.get('experience', '') }}"
+                        placeholder="Example: 2 Years"
+                    >
+
+                </div>
+
+
+                <div class="edit-form-group full-width">
+
+                    <label>
+                        Skills
+                    </label>
+
+                    <input
+                        type="text"
+                        name="skills"
+                        value="{{ alumni.get('skills', '') }}"
+                        placeholder="Example: Python, Java, React, MongoDB"
+                    >
+
+                    <small>
+                        Separate multiple skills with commas.
+                    </small>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- SOCIAL LINKS -->
+
+        <section class="edit-profile-section">
+
+            <div class="edit-section-title">
+
+                <h2>
+                    Professional Links
+                </h2>
+
+                <p>
+                    Add your professional profiles.
+                </p>
+
+            </div>
+
+
+            <div class="edit-form-grid">
+
+
+                <div class="edit-form-group">
+
+                    <label>
+                        LinkedIn
+                    </label>
+
+                    <input
+                        type="url"
+                        name="linkedin"
+                        value="{{ alumni.get('linkedin', '') }}"
+                        placeholder="https://linkedin.com/in/username"
+                    >
+
+                </div>
+
+
+                <div class="edit-form-group">
+
+                    <label>
+                        GitHub
+                    </label>
+
+                    <input
+                        type="url"
+                        name="github"
+                        value="{{ alumni.get('github', '') }}"
+                        placeholder="https://github.com/username"
+                    >
+
+                </div>
+
+
+                <div class="edit-form-group full-width">
+
+                    <label>
+                        Portfolio
+                    </label>
+
+                    <input
+                        type="url"
+                        name="portfolio"
+                        value="{{ alumni.get('portfolio', '') }}"
+                        placeholder="https://yourportfolio.com"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- MENTORSHIP -->
+
+        <section class="edit-profile-section">
+
+            <div class="edit-section-title">
+
+                <h2>
+                    Mentorship
+
+                </h2>
+
+                <p>
+                    Let students know whether you are available
+                    to mentor them.
+                </p>
+
+            </div>
+
+
+            <div class="edit-form-grid">
+
+
+                <div class="edit-form-group">
+
+                    <label>
+                        Available for Mentorship?
+                    </label>
+
+                    <select name="mentorship">
+
+                        <option
+                            value="yes"
+                            {% if alumni.get('mentorship') == 'yes' %}
+                            selected
+                            {% endif %}
+                        >
+                            Yes
+                        </option>
+
+                        <option
+                            value="no"
+                            {% if alumni.get('mentorship') != 'yes' %}
+                            selected
+                            {% endif %}
+                        >
+                            No
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="edit-form-group">
+
+                    <label>
+                        Mentorship Areas
+                    </label>
+
+                    <input
+                        type="text"
+                        name="mentor_areas"
+                        value="{{ alumni.get('mentor_areas', '') }}"
+                        placeholder="Example: Web Development, Career Guidance"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- BUTTONS -->
+
+        <div class="edit-profile-actions">
+
+            <a href="{{ url_for('alumni_dashboard') }}"
+               class="cancel-profile-button">
+
+                Cancel
+
+            </a>
+
+
+            <button type="submit"
+                    class="save-profile-button">
+
+                Save Changes
+
+            </button>
+
+        </div>
+
+
+    </form>
+
+</main>
+
+</body>
+
+</html>

@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Students - College Alumni Portal</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #173452;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .top-navbar {
+            height: 74px;
+            background: white;
+            border-bottom: 1px solid #e7eaf0;
+
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+
+            align-items: center;
+
+            padding: 0 45px;
+        }
+
+        .brand {
+            text-decoration: none;
+            color: #173452;
+
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 32px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #596579;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            padding: 27px 0;
+
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #4d35f5;
+        }
+
+        .nav-links a.active {
+            color: #4d35f5;
+            border-bottom: 3px solid #4d35f5;
+        }
+
+        .admin-profile {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-avatar {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 50%;
+
+            background: #4d35f5;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: 700;
+        }
+
+        .admin-name {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .admin-role {
+            font-size: 11px;
+            color: #7b8494;
+            margin-top: 3px;
+        }
+
+        /* ================= MAIN ================= */
+
+        .container {
+            width: 82%;
+            max-width: 1400px;
+
+            margin: 0 auto;
+
+            padding: 35px 0 70px;
+        }
+
+        .page-header {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 28px;
+        }
+
+        .page-title h1 {
+            font-size: 30px;
+            color: #173452;
+            margin-bottom: 8px;
+        }
+
+        .page-title p {
+            font-size: 14px;
+            color: #7b8494;
+        }
+
+        .college-name {
+            color: #4d35f5;
+            font-weight: 700;
+        }
+
+        .back-btn {
+            text-decoration: none;
+
+            background: white;
+            color: #4d35f5;
+
+            border: 1px solid #dfe3eb;
+
+            padding: 10px 18px;
+
+            border-radius: 8px;
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .back-btn:hover {
+            background: #f7f6ff;
+        }
+
+        /* ================= FLASH ================= */
+
+        .flash {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+
+            font-size: 13px;
+        }
+
+        .flash.success {
+            background: #eaf8f0;
+            color: #167344;
+        }
+
+        .flash.error {
+            background: #fff0f0;
+            color: #c43b3b;
+        }
+
+        /* ================= SEARCH ================= */
+
+        .search-card {
+            background: white;
+
+            border: 1px solid #e5e8ef;
+            border-radius: 12px;
+
+            padding: 20px;
+
+            margin-bottom: 22px;
+
+            box-shadow: 0 3px 12px rgba(25, 35, 55, 0.04);
+        }
+
+        .search-form {
+            display: flex;
+            gap: 12px;
+        }
+
+        .search-input {
+            flex: 1;
+
+            height: 40px;
+
+            border: 1px solid #dfe3eb;
+            border-radius: 8px;
+
+            padding: 0 14px;
+
+            font-size: 13px;
+
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #4d35f5;
+        }
+
+        .status-select {
+            width: 130px;
+
+            border: 1px solid #dfe3eb;
+            border-radius: 8px;
+
+            padding: 0 10px;
+
+            font-size: 13px;
+
+            background: white;
+        }
+
+        .search-btn {
+            border: none;
+
+            background: #4d35f5;
+            color: white;
+
+            padding: 0 22px;
+
+            border-radius: 8px;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+        .clear-btn {
+            text-decoration: none;
+
+            background: #eef1f6;
+            color: #5d6878;
+
+            display: flex;
+            align-items: center;
+
+            padding: 0 18px;
+
+            border-radius: 8px;
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* ================= TABLE ================= */
+
+        .table-card {
+            background: white;
+
+            border: 1px solid #e5e8ef;
+            border-radius: 12px;
+
+            overflow: hidden;
+
+            box-shadow: 0 3px 12px rgba(25, 35, 55, 0.04);
+        }
+
+        .table-header {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 20px 22px;
+
+            border-bottom: 1px solid #edf0f4;
+        }
+
+        .table-header h2 {
+            font-size: 18px;
+            color: #173452;
+        }
+
+        .count {
+            font-size: 12px;
+            color: #7b8494;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #fafbfc;
+
+            color: #718096;
+
+            text-align: left;
+
+            padding: 13px 18px;
+
+            font-size: 10px;
+
+            letter-spacing: 0.7px;
+
+            text-transform: uppercase;
+
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 16px 18px;
+
+            border-top: 1px solid #edf0f4;
+
+            color: #526174;
+
+            font-size: 12px;
+
+            white-space: nowrap;
+        }
+
+        td strong {
+            color: #173452;
+            font-size: 13px;
+        }
+
+        .email {
+            color: #667085;
+        }
+
+        /* ================= STATUS ================= */
+
+        .status-badge {
+            display: inline-block;
+
+            padding: 5px 10px;
+
+            border-radius: 20px;
+
+            font-size: 10px;
+
+            font-weight: 700;
+        }
+
+        .status-approved {
+            background: #eaf8ef;
+            color: #167344;
+        }
+
+        .status-pending {
+            background: #fff4e5;
+            color: #c56a00;
+        }
+
+        .status-rejected {
+            background: #fff0f0;
+            color: #c43b3b;
+        }
+
+        .status-suspended {
+            background: #fff4e5;
+            color: #a65d00;
+        }
+
+        /* ================= ACTIONS ================= */
+
+        .actions {
+            display: flex;
+            gap: 7px;
+            align-items: center;
+        }
+
+        .action-btn {
+            border-radius: 7px;
+
+            padding: 7px 11px;
+
+            font-size: 11px;
+            font-weight: 600;
+
+            text-decoration: none;
+
+            cursor: pointer;
+
+            display: inline-block;
+
+            border: 1px solid transparent;
+        }
+
+        .approve-btn {
+            background: #eaf8f0;
+            color: #167344;
+        }
+
+        .reject-btn {
+            background: #fff0f0;
+            color: #c43b3b;
+        }
+
+        .suspend-btn {
+            background: #fff7e8;
+            color: #b76b00;
+            border-color: #f0b85a;
+        }
+
+        .delete-btn {
+            background: white;
+            color: #d13a3a;
+            border-color: #ef6b6b;
+        }
+
+        .activate-btn {
+            background: #eaf8f0;
+            color: #167344;
+            border-color: #9bd4b5;
+        }
+
+        .action-btn:hover {
+            opacity: 0.78;
+        }
+
+        .no-action {
+            color: #a0a7b2;
+            font-size: 11px;
+        }
+
+        /* ================= EMPTY ================= */
+
+        .empty {
+            padding: 45px;
+
+            text-align: center;
+
+            color: #7b8494;
+
+            font-size: 13px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1100px) {
+
+            .container {
+                width: 94%;
+            }
+
+            .top-navbar {
+                grid-template-columns: 1fr;
+
+                height: auto;
+
+                gap: 15px;
+
+                padding: 18px;
+            }
+
+            .brand {
+                text-align: center;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+            }
+
+            .admin-profile {
+                justify-content: center;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .search-form {
+                flex-direction: column;
+            }
+
+            .status-select {
+                width: 100%;
+                height: 40px;
+            }
+
+            .search-btn,
+            .clear-btn {
+                height: 40px;
+                justify-content: center;
+            }
+
+            .nav-links {
+                gap: 18px;
+                overflow-x: auto;
+            }
+
+            .nav-links a {
+                padding: 8px 0;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="top-navbar">
+
+    <a href="{{ url_for('home') }}" class="brand">
+        College Alumni Portal
+    </a>
+
+    <div class="nav-links">
+
+        <a href="{{ url_for('home') }}">
+            Home
+        </a>
+
+        <a href="{{ url_for('college_admin_dashboard') }}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('college_admin_students') }}" class="active">
+            Students
+        </a>
+
+        <a href="{{ url_for('college_admin_alumni') }}">
+            Alumni
+        </a>
+
+        <a href="{{ url_for('college_admin_announcements') }}">
+            Announcements
+        </a>
+
+    </div>
+
+    <div class="admin-profile">
+
+        <div class="admin-avatar">
+            CA
+        </div>
+
+        <div>
+
+            <div class="admin-name">
+                {{ college_admin.get('full_name', 'NEC Admin') }}
+            </div>
+
+            <div class="admin-role">
+                College Administrator
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="container">
+
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <div class="page-title">
+
+            <h1>
+                Students
+            </h1>
+
+            <p>
+                Manage students registered under
+                <span class="college-name">
+                    {{ college.get('college_name', 'Your College') }}
+                </span>
+            </p>
+
+        </div>
+
+        <a href="{{ url_for('college_admin_dashboard') }}"
+           class="back-btn">
+            Back to Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- FLASH MESSAGES -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="flash {{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- SEARCH -->
+
+    <div class="search-card">
+
+        <form method="GET"
+              action="{{ url_for('college_admin_students') }}"
+              class="search-form">
+
+            <input
+                type="text"
+                name="search"
+                class="search-input"
+                placeholder="Search by name, email or department..."
+                value="{{ search }}"
+            >
+
+            <select name="status"
+                    class="status-select">
+
+                <option value="">
+                    All Status
+                </option>
+
+                <option value="Pending"
+                    {% if selected_status == "Pending" %}selected{% endif %}>
+                    Pending
+                </option>
+
+                <option value="Approved"
+                    {% if selected_status == "Approved" %}selected{% endif %}>
+                    Approved
+                </option>
+
+                <option value="Suspended"
+                    {% if selected_status == "Suspended" %}selected{% endif %}>
+                    Suspended
+                </option>
+
+                <option value="Rejected"
+                    {% if selected_status == "Rejected" %}selected{% endif %}>
+                    Rejected
+                </option>
+
+            </select>
+
+            <button type="submit"
+                    class="search-btn">
+                Search
+            </button>
+
+            <a href="{{ url_for('college_admin_students') }}"
+               class="clear-btn">
+                Clear
+            </a>
+
+        </form>
+
+    </div>
+
+
+    <!-- STUDENTS TABLE -->
+
+    <div class="table-card">
+
+        <div class="table-header">
+
+            <h2>
+                Registered Students
+            </h2>
+
+            <span class="count">
+                {{ students|length }} student(s)
+            </span>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            {% if students %}
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Name</th>
+
+                        <th>Email</th>
+
+                        <th>Department</th>
+
+                        <th>Register Number</th>
+
+                        <th>Year</th>
+
+                        <th>Status</th>
+
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for student in students %}
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                {{ student.get('full_name', 'Unknown') }}
+                            </strong>
+                        </td>
+
+                        <td class="email">
+                            {{ student.get('email', '-') }}
+                        </td>
+
+                        <td>
+                            {{ student.get('department', '-') }}
+                        </td>
+
+                        <td>
+                            {{ student.get('register_number', '-') }}
+                        </td>
+
+                        <td>
+                            {{ student.get('batch', student.get('year', '-')) }}
+                        </td>
+
+                        <td>
+
+                            {% set status = student.get('status', 'Pending') %}
+
+                            {% if status == 'Approved' or status == 'Active' %}
+
+                                <span class="status-badge status-approved">
+                                    Approved
+                                </span>
+
+                            {% elif status == 'Pending' %}
+
+                                <span class="status-badge status-pending">
+                                    Pending
+                                </span>
+
+                            {% elif status == 'Suspended' %}
+
+                                <span class="status-badge status-suspended">
+                                    Suspended
+                                </span>
+
+                            {% else %}
+
+                                <span class="status-badge status-rejected">
+                                    {{ status }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            <div class="actions">
+
+                                {% if status == 'Pending' %}
+
+                                    <a
+                                        href="{{ url_for('approve_student', student_id=student['_id']) }}"
+                                        class="action-btn approve-btn">
+                                        Approve
+                                    </a>
+
+                                    <a
+                                        href="{{ url_for('reject_student', student_id=student['_id']) }}"
+                                        class="action-btn reject-btn">
+                                        Reject
+                                    </a>
+
+                                {% elif status == 'Approved' or status == 'Active' %}
+
+                                    <a
+                                        href="{{ url_for('college_admin_suspend_student', student_id=student['_id']) }}"
+                                        class="action-btn suspend-btn"
+                                        onclick="return confirm('Suspend this student?');">
+                                        Suspend
+                                    </a>
+
+                                    <a
+                                        href="{{ url_for('college_admin_delete_student', student_id=student['_id']) }}"
+                                        class="action-btn delete-btn"
+                                        onclick="return confirm('Delete this student permanently?');">
+                                        Delete
+                                    </a>
+
+                                {% elif status == 'Suspended' %}
+
+                                    <a
+                                        href="{{ url_for('college_admin_activate_student', student_id=student['_id']) }}"
+                                        class="action-btn activate-btn">
+                                        Activate
+                                    </a>
+
+                                    <a
+                                        href="{{ url_for('college_admin_delete_student', student_id=student['_id']) }}"
+                                        class="action-btn delete-btn"
+                                        onclick="return confirm('Delete this student permanently?');">
+                                        Delete
+                                    </a>
+
+                                {% else %}
+
+                                    <a
+                                        href="{{ url_for('college_admin_delete_student', student_id=student['_id']) }}"
+                                        class="action-btn delete-btn"
+                                        onclick="return confirm('Delete this student permanently?');">
+                                        Delete
+                                    </a>
+
+                                {% endif %}
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+                <div class="empty">
+                    No students found.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</main>
+
+</body>
+
+</html>

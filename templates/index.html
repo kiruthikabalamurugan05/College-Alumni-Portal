@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>College Alumni Portal</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="page">
+
+    <div class="welcome-card">
+
+        <!-- TOP WELCOME -->
+        <h2 class="welcome-back">
+            Welcome Back
+        </h2>
+
+        <!-- PORTAL NAME -->
+        <h1>
+            College Alumni Portal
+        </h1>
+
+        <p class="subtitle">
+            Connect • Network • Grow
+        </p>
+
+        <div class="divider"></div>
+
+        <p class="welcome-text">
+            Welcome to your college community
+        </p>
+
+        <!-- BUTTONS -->
+        <div class="home-buttons">
+
+            <a href="{{ url_for('login') }}"
+               class="primary-button">
+                Login
+            </a>
+
+            <a href="{{ url_for('register_college') }}"
+               class="secondary-button">
+                Register College
+            </a>
+
+            <a href="{{ url_for('register_student') }}"
+               class="secondary-button">
+                Register Student
+            </a>
+
+            <a href="{{ url_for('register_alumni') }}"
+               class="secondary-button">
+                Register Alumni
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

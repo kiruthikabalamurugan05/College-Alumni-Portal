@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Messages - College Alumni Portal</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        /* =====================================================
+           PAGE
+        ===================================================== */
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(
+                135deg,
+                #c4ddf8 0%,
+                #9bbcf1 50%,
+                #7f8ff0 100%
+            );
+
+            color: #173452;
+            overflow-x: hidden;
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .portal-navbar {
+            height: 76px;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 28px;
+
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            box-sizing: border-box;
+        }
+
+        .portal-logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #173452;
+            white-space: nowrap;
+        }
+
+        .portal-nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .portal-nav-links a {
+            position: relative;
+
+            text-decoration: none;
+
+            color: #64748b;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            padding: 29px 0;
+
+            white-space: nowrap;
+        }
+
+        .portal-nav-links a:hover {
+            color: #4d35f5;
+        }
+
+        .portal-nav-links a.active {
+            color: #4d35f5;
+        }
+
+        .portal-nav-links a.active::after {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            height: 3px;
+
+            background: #4d35f5;
+            border-radius: 3px 3px 0 0;
+        }
+
+        .portal-nav-links .logout {
+            color: #dc3545;
+        }
+
+        .portal-nav-links .logout:hover {
+            color: #b02a37;
+        }
+
+
+        /* =====================================================
+           MAIN PAGE
+        ===================================================== */
+
+        .messages-page {
+            width: min(1200px, 92%);
+
+            margin: 0 auto;
+
+            padding: 42px 0 60px;
+        }
+
+
+        /* =====================================================
+           PAGE HEADER
+        ===================================================== */
+
+        .messages-header {
+            margin-bottom: 22px;
+        }
+
+        .messages-header .small-label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #4d35f5;
+
+            font-size: 11px;
+            font-weight: 700;
+
+            letter-spacing: 1.5px;
+        }
+
+        .messages-header h1 {
+            margin: 0;
+
+            color: #173452;
+
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .messages-header p {
+            margin: 7px 0 0;
+
+            color: #5f7085;
+
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           MESSAGES LAYOUT
+        ===================================================== */
+
+        .messages-layout {
+
+            display: grid;
+
+            grid-template-columns: 300px minmax(0, 1fr);
+
+            height: 620px;
+
+            background: #ffffff;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 12px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 10px 30px rgba(23, 52, 82, 0.08);
+        }
+
+
+        /* =====================================================
+           CONTACTS
+        ===================================================== */
+
+        .messages-contacts {
+
+            min-width: 0;
+
+            background: #fbfcfe;
+
+            border-right: 1px solid #e5e7eb;
+
+            overflow-y: auto;
+        }
+
+        .messages-section-title {
+
+            height: 65px;
+
+            padding: 0 18px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            border-bottom: 1px solid #e5e7eb;
+
+            box-sizing: border-box;
+        }
+
+        .messages-section-title h2 {
+
+            margin: 0;
+
+            color: #173452;
+
+            font-size: 15px;
+        }
+
+        .messages-section-title span {
+
+            min-width: 23px;
+            height: 23px;
+
+            padding: 0 7px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: #eeeaff;
+
+            color: #4d35f5;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            box-sizing: border-box;
+        }
+
+
+        /* =====================================================
+           CONTACT ITEM
+        ===================================================== */
+
+        .message-contact {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 15px 16px;
+
+            text-decoration: none;
+
+            border-bottom: 1px solid #edf0f3;
+
+            transition: background-color 0.2s ease;
+        }
+
+        .message-contact:hover,
+        .message-contact.selected {
+
+            background: #eeeaff;
+        }
+
+        .message-avatar {
+
+            width: 40px;
+            height: 40px;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+
+            background: #eeeaff;
+
+            color: #4d35f5;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .message-contact-info {
+
+            display: flex;
+
+            flex-direction: column;
+
+            min-width: 0;
+        }
+
+        .message-contact-info strong {
+
+            color: #173452;
+
+            font-size: 13px;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+        }
+
+        .message-contact-info span {
+
+            margin-top: 4px;
+
+            color: #7b8494;
+
+            font-size: 11px;
+        }
+
+
+        /* =====================================================
+           CHAT SECTION
+        ===================================================== */
+
+        .chat-section {
+
+            min-width: 0;
+
+            display: flex;
+
+            flex-direction: column;
+
+            background: #ffffff;
+
+            height: 100%;
+        }
+
+
+        /* =====================================================
+           CHAT HEADER
+        ===================================================== */
+
+        .chat-header {
+
+            height: 65px;
+
+            padding: 0 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            flex-shrink: 0;
+
+            border-bottom: 1px solid #e5e7eb;
+
+            box-sizing: border-box;
+        }
+
+        .chat-header .message-avatar {
+
+            width: 40px;
+            height: 40px;
+        }
+
+        .chat-header-info {
+
+            display: flex;
+
+            flex-direction: column;
+        }
+
+        .chat-header-info strong {
+
+            color: #173452;
+
+            font-size: 14px;
+        }
+
+        .chat-header-info span {
+
+            margin-top: 3px;
+
+            color: #7b8494;
+
+            font-size: 11px;
+        }
+
+
+        /* =====================================================
+           CHAT MESSAGES AREA
+        ===================================================== */
+
+        .chat-messages {
+
+            flex: 1;
+
+            min-height: 0;
+
+            overflow-y: auto;
+
+            padding: 25px;
+
+            background: #f8f9fc;
+
+            box-sizing: border-box;
+        }
+
+
+        /* =====================================================
+           MESSAGE BUBBLES
+        ===================================================== */
+
+        .chat-message {
+
+            display: flex;
+
+            flex-direction: column;
+
+            margin-bottom: 18px;
+        }
+
+        .chat-message.sent {
+
+            align-items: flex-end;
+        }
+
+        .chat-message.received {
+
+            align-items: flex-start;
+        }
+
+        .message-bubble {
+
+            max-width: 70%;
+
+            padding: 12px 15px;
+
+            border-radius: 12px;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+
+            word-wrap: break-word;
+        }
+
+        .chat-message.sent .message-bubble {
+
+            background: #4d35f5;
+
+            color: #ffffff;
+
+            border-bottom-right-radius: 3px;
+        }
+
+        .chat-message.received .message-bubble {
+
+            background: #ffffff;
+
+            color: #344054;
+
+            border: 1px solid #e5e7eb;
+
+            border-bottom-left-radius: 3px;
+        }
+
+        .message-time {
+
+            margin-top: 5px;
+
+            color: #98a2b3;
+
+            font-size: 10px;
+        }
+
+
+        /* =====================================================
+           LARGE MESSAGE COMPOSER
+        ===================================================== */
+
+        .chat-input-area {
+
+            flex-shrink: 0;
+
+            display: flex;
+
+            align-items: flex-end;
+
+            gap: 12px;
+
+            padding: 18px 20px;
+
+            background: #ffffff;
+
+            border-top: 1px solid #e5e7eb;
+
+            box-sizing: border-box;
+        }
+
+
+        /* LARGE TEXTAREA */
+
+        .chat-input-area textarea {
+
+            flex: 1;
+
+            width: 100%;
+
+            min-width: 0;
+
+            min-height: 58px;
+
+            height: 58px;
+
+            max-height: 150px;
+
+            padding: 16px;
+
+            border: 1px solid #d9dee7;
+
+            border-radius: 8px;
+
+            background: #ffffff;
+
+            color: #173452;
+
+            font-family: Arial, Helvetica, sans-serif;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+
+            outline: none;
+
+            resize: vertical;
+
+            box-sizing: border-box;
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .chat-input-area textarea::placeholder {
+
+            color: #9aa4b2;
+        }
+
+        .chat-input-area textarea:focus {
+
+            border-color: #4d35f5;
+
+            box-shadow:
+                0 0 0 2px rgba(77, 53, 245, 0.10);
+        }
+
+
+        /* SEND BUTTON */
+
+        .chat-input-area button {
+
+            flex-shrink: 0;
+
+            width: 125px;
+
+            height: 58px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #4d35f5;
+
+            color: #ffffff;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition:
+                background-color 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .chat-input-area button:hover {
+
+            background: #3e27d8;
+
+            transform: translateY(-1px);
+        }
+
+
+        /* =====================================================
+           EMPTY CHAT
+        ===================================================== */
+
+        .no-selected-chat,
+        .empty-chat {
+
+            height: 100%;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            text-align: center;
+
+            padding: 30px;
+
+            box-sizing: border-box;
+        }
+
+        .no-selected-chat h2,
+        .empty-chat h3 {
+
+            margin: 0 0 8px;
+
+            color: #173452;
+
+            font-size: 18px;
+        }
+
+        .no-selected-chat p,
+        .empty-chat p {
+
+            margin: 0;
+
+            color: #7b8494;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           NO CONTACTS
+        ===================================================== */
+
+        .no-contacts {
+
+            height: 250px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            text-align: center;
+
+            padding: 25px;
+        }
+
+        .no-contacts p {
+
+            margin: 0;
+
+            color: #7b8494;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 900px) {
+
+            .portal-navbar {
+
+                height: auto;
+
+                padding: 15px 20px;
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 10px;
+            }
+
+            .portal-nav-links {
+
+                width: 100%;
+
+                overflow-x: auto;
+
+                gap: 22px;
+            }
+
+            .portal-nav-links a {
+
+                padding: 8px 0;
+            }
+
+            .portal-nav-links a.active::after {
+
+                bottom: -2px;
+            }
+
+            .messages-layout {
+
+                grid-template-columns: 250px minmax(0, 1fr);
+
+                height: 600px;
+            }
+        }
+
+
+        @media (max-width: 700px) {
+
+            .messages-page {
+
+                width: 94%;
+
+                padding-top: 25px;
+            }
+
+            .messages-layout {
+
+                grid-template-columns: 1fr;
+
+                height: auto;
+
+                min-height: 650px;
+            }
+
+            .messages-contacts {
+
+                max-height: 230px;
+
+                border-right: none;
+
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            .chat-section {
+
+                min-height: 500px;
+            }
+
+            .chat-input-area {
+
+                padding: 14px;
+
+            }
+
+            .chat-input-area textarea {
+
+                min-height: 55px;
+
+                height: 55px;
+
+            }
+
+            .chat-input-area button {
+
+                width: 90px;
+
+                height: 55px;
+            }
+
+            .message-bubble {
+
+                max-width: 85%;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<header class="portal-navbar">
+
+    <div class="portal-logo">
+        College Alumni Portal
+    </div>
+
+
+    <nav class="portal-nav-links">
+
+        {% if session.get("role") == "student" %}
+
+            <a href="{{ url_for('student_dashboard') }}">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('find_alumni') }}">
+                Find Alumni
+            </a>
+
+            <a href="{{ url_for('student_connections') }}">
+                Connections
+            </a>
+
+        {% elif session.get("role") == "alumni" %}
+
+            <a href="{{ url_for('alumni_dashboard') }}">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('alumni_connections') }}">
+                Connections
+            </a>
+
+        {% endif %}
+
+
+        <a href="{{ url_for('messages') }}"
+           class="active">
+            Messages
+        </a>
+
+
+        {% if session.get("role") == "student" %}
+
+            <a href="{{ url_for('student_mentorship') }}">
+                Mentorship
+            </a>
+
+            <a href="{{ url_for('student_tasks') }}">
+                Tasks
+            </a>
+
+        {% elif session.get("role") == "alumni" %}
+
+            <a href="{{ url_for('alumni_dashboard') }}#mentorship">
+                Mentorship
+            </a>
+
+            <a href="{{ url_for('alumni_tasks') }}">
+                Tasks
+            </a>
+
+        {% endif %}
+
+
+        {% if session.get("role") == "student" %}
+
+            <a href="{{ url_for('student_dashboard') }}#profile">
+                Profile
+            </a>
+
+        {% elif session.get("role") == "alumni" %}
+
+            <a href="{{ url_for('alumni_dashboard') }}#profile">
+                Profile
+            </a>
+
+        {% endif %}
+
+
+        <a href="{{ url_for('logout') }}"
+           class="logout">
+            Logout
+        </a>
+
+    </nav>
+
+</header>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="messages-page">
+
+
+    <!-- PAGE HEADER -->
+
+    <div class="messages-header">
+
+        <span class="small-label">
+            COMMUNICATION
+        </span>
+
+        <h1>
+            Messages
+        </h1>
+
+        <p>
+            Connect and communicate with your college community.
+        </p>
+
+    </div>
+
+
+    <!-- =================================================
+         MESSAGES LAYOUT
+    ================================================== -->
+
+    <section class="messages-layout">
+
+
+        <!-- =================================================
+             CONTACTS
+        ================================================== -->
+
+        <aside class="messages-contacts">
+
+            <div class="messages-section-title">
+
+                <h2>
+                    Connections
+                </h2>
+
+                <span>
+                    {{ contacts|length }}
+                </span>
+
+            </div>
+
+
+            {% if contacts %}
+
+                {% for contact in contacts %}
+
+                    <a href="{{ url_for(
+                        'messages',
+                        user_id=contact.id
+                    ) }}"
+                       class="message-contact
+                       {% if selected_user_id == contact.id %}
+                           selected
+                       {% endif %}">
+
+                        <div class="message-avatar">
+
+                            {{ contact.name[0]|upper }}
+
+                        </div>
+
+
+                        <div class="message-contact-info">
+
+                            <strong>
+                                {{ contact.name }}
+                            </strong>
+
+                            <span>
+                                {{ contact.role }}
+                            </span>
+
+                        </div>
+
+                    </a>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="no-contacts">
+
+                    <p>
+                        No accepted connections yet.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </aside>
+
+
+        <!-- =================================================
+             CHAT
+        ================================================== -->
+
+        <section class="chat-section">
+
+
+            {% if selected_contact %}
+
+
+                <!-- CHAT HEADER -->
+
+                <div class="chat-header">
+
+                    <div class="message-avatar">
+
+                        {{ selected_contact.name[0]|upper }}
+
+                    </div>
+
+
+                    <div class="chat-header-info">
+
+                        <strong>
+                            {{ selected_contact.name }}
+                        </strong>
+
+                        <span>
+                            {{ selected_contact.role }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CHAT MESSAGES -->
+
+                <div class="chat-messages"
+                     id="chatMessages">
+
+
+                    {% if chat_messages %}
+
+                        {% for message in chat_messages %}
+
+                            {% if message.sender_id == current_user_id %}
+
+                                <div class="chat-message sent">
+
+                                    <div class="message-bubble">
+
+                                        {{ message.message }}
+
+                                    </div>
+
+                                    <div class="message-time">
+
+                                        {% if message.created_at %}
+                                            {{ message.created_at.strftime("%d %b %Y, %I:%M %p") }}
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+                            {% else %}
+
+                                <div class="chat-message received">
+
+                                    <div class="message-bubble">
+
+                                        {{ message.message }}
+
+                                    </div>
+
+                                    <div class="message-time">
+
+                                        {% if message.created_at %}
+                                            {{ message.created_at.strftime("%d %b %Y, %I:%M %p") }}
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+
+                        {% endfor %}
+
+
+                    {% else %}
+
+                        <div class="empty-chat">
+
+                            <h3>
+                                Start a conversation
+                            </h3>
+
+                            <p>
+                                Send a message to {{ selected_contact.name }}.
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+
+                </div>
+
+
+                <!-- =================================================
+                     LARGE MESSAGE INPUT
+                ================================================== -->
+
+                <form method="POST"
+                      action="{{ url_for(
+                          'send_message',
+                          user_id=selected_user_id
+                      ) }}"
+                      class="chat-input-area">
+
+
+                    <textarea
+                        name="message"
+                        placeholder="Type your message..."
+                        autocomplete="off"
+                        required></textarea>
+
+
+                    <button type="submit">
+                        Send
+                    </button>
+
+
+                </form>
+
+
+            {% else %}
+
+
+                <!-- NO CHAT SELECTED -->
+
+                <div class="no-selected-chat">
+
+                    <h2>
+                        Select a connection
+                    </h2>
+
+                    <p>
+                        Select a connection from the left to start messaging.
+                    </p>
+
+                </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+    </section>
+
+
+</main>
+
+
+<!-- =====================================================
+     AUTO SCROLL CHAT
+===================================================== -->
+
+<script>
+
+    const chatMessages =
+        document.getElementById("chatMessages");
+
+    if (chatMessages) {
+
+        chatMessages.scrollTop =
+            chatMessages.scrollHeight;
+
+    }
+
+</script>
+
+
+</body>
+</html>

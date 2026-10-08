@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Find Alumni - College Alumni Portal</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6fb;
+            color: #173b5c;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            height: 68px;
+            background: white;
+            border-bottom: 1px solid #e4e8ef;
+
+            display: flex;
+            align-items: center;
+
+            padding: 0 28px;
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: #173b5c;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+
+            margin-left: auto;
+            margin-right: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #53657a;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            padding: 24px 0;
+
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #4f35f5;
+        }
+
+        .nav-links a.active::after {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            height: 3px;
+
+            background: #4f35f5;
+        }
+
+        .student-profile {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .profile-circle {
+            width: 34px;
+            height: 34px;
+
+            border-radius: 50%;
+
+            background: #4f35f5;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .profile-name {
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .profile-role {
+            font-size: 10px;
+            color: #7b8794;
+        }
+
+        .logout {
+            margin-left: 12px;
+
+            text-decoration: none;
+
+            color: #6b7280;
+
+            font-size: 11px;
+        }
+
+        /* ================= PAGE ================= */
+
+        .page {
+            width: calc(100% - 100px);
+            max-width: 1450px;
+
+            margin: 25px auto 50px;
+        }
+
+        /* ================= HERO ================= */
+
+        .hero {
+            background: linear-gradient(
+                110deg,
+                #4938df,
+                #2678df,
+                #0bb3c9
+            );
+
+            border-radius: 12px;
+
+            padding: 27px 30px;
+
+            color: white;
+
+            box-shadow:
+                0 7px 20px rgba(49, 79, 190, 0.16);
+        }
+
+        .college-badge {
+            display: inline-block;
+
+            background: white;
+            color: #4f35f5;
+
+            padding: 6px 12px;
+
+            border-radius: 16px;
+
+            font-size: 10px;
+            font-weight: 700;
+
+            margin-bottom: 10px;
+        }
+
+        .hero h1 {
+            margin: 0;
+
+            font-size: 26px;
+
+            color: white;
+        }
+
+        .hero p {
+            margin: 7px 0 0;
+
+            font-size: 12px;
+
+            color: white;
+        }
+
+        /* ================= SEARCH ================= */
+
+        .search-card {
+            margin-top: 18px;
+
+            background: white;
+
+            border: 1px solid #e1e7ef;
+
+            border-radius: 9px;
+
+            padding: 18px;
+        }
+
+        .search-form {
+            display: grid;
+
+            grid-template-columns: 1fr 230px 90px;
+
+            gap: 10px;
+        }
+
+        .search-form input,
+        .search-form select {
+
+            width: 100%;
+
+            padding: 12px;
+
+            border: 1px solid #d8e0e9;
+
+            border-radius: 6px;
+
+            outline: none;
+
+            font-size: 12px;
+
+            color: #35495e;
+
+            background: white;
+        }
+
+        .search-form input:focus,
+        .search-form select:focus {
+            border-color: #4f35f5;
+        }
+
+        .search-btn {
+
+            border: none;
+
+            border-radius: 6px;
+
+            background: #4f35f5;
+
+            color: white;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+        .clear-btn {
+
+            margin-left: 8px;
+
+            text-decoration: none;
+
+            font-size: 11px;
+
+            color: #64748b;
+        }
+
+        /* ================= DIRECTORY ================= */
+
+        .directory-card {
+
+            margin-top: 18px;
+
+            background: white;
+
+            border: 1px solid #e1e7ef;
+
+            border-radius: 9px;
+
+            overflow: hidden;
+        }
+
+        .directory-header {
+
+            padding: 18px;
+
+            border-bottom: 1px solid #e7ebf0;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+        .directory-header h2 {
+
+            margin: 0;
+
+            font-size: 16px;
+
+            color: #173b5c;
+        }
+
+        .directory-count {
+
+            font-size: 11px;
+
+            color: #718096;
+        }
+
+        .alumni-grid {
+
+            padding: 18px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 14px;
+        }
+
+        .alumni-card {
+
+            border: 1px solid #dfe5ed;
+
+            border-radius: 8px;
+
+            padding: 17px;
+
+            display: flex;
+
+            gap: 13px;
+
+            transition: 0.2s;
+        }
+
+        .alumni-card:hover {
+
+            border-color: #b8c8ed;
+
+            box-shadow:
+                0 4px 14px rgba(39, 68, 130, 0.08);
+        }
+
+        .alumni-avatar {
+
+            flex-shrink: 0;
+
+            width: 48px;
+            height: 48px;
+
+            border-radius: 50%;
+
+            background: #4f35f5;
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 15px;
+
+            font-weight: 700;
+        }
+
+        .alumni-details {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .alumni-details h3 {
+
+            margin: 0;
+
+            font-size: 14px;
+
+            color: #173b5c;
+        }
+
+        .job-title {
+
+            margin-top: 4px;
+
+            display: block;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            color: #1265ef;
+        }
+
+        .company {
+
+            display: block;
+
+            margin-top: 4px;
+
+            font-size: 10px;
+
+            color: #718096;
+        }
+
+        .department {
+
+            display: inline-block;
+
+            margin-top: 7px;
+
+            padding: 4px 7px;
+
+            background: #f0f3ff;
+
+            color: #4f35f5;
+
+            border-radius: 10px;
+
+            font-size: 9px;
+
+            font-weight: 600;
+        }
+
+        .mentor {
+
+            display: inline-block;
+
+            margin-left: 5px;
+
+            padding: 4px 7px;
+
+            background: #dcf8e8;
+
+            color: #16834b;
+
+            border-radius: 10px;
+
+            font-size: 9px;
+
+            font-weight: 600;
+        }
+
+        .actions {
+
+            display: flex;
+
+            gap: 7px;
+
+            margin-top: 12px;
+        }
+
+        .btn {
+
+            display: inline-block;
+
+            text-decoration: none;
+
+            padding: 7px 10px;
+
+            border-radius: 5px;
+
+            font-size: 10px;
+
+            font-weight: 600;
+        }
+
+        .btn-outline {
+
+            border: 1px solid #cdd5df;
+
+            color: #526579;
+
+            background: white;
+        }
+
+        .btn-primary {
+
+            background: #146ff2;
+
+            border: 1px solid #146ff2;
+
+            color: white;
+        }
+
+        /* ================= EMPTY ================= */
+
+        .empty {
+
+            margin: 18px;
+
+            padding: 55px 20px;
+
+            text-align: center;
+
+            border: 1px dashed #d4dce6;
+
+            border-radius: 8px;
+
+            color: #718096;
+        }
+
+        .empty h3 {
+
+            margin: 0 0 6px;
+
+            font-size: 14px;
+
+            color: #173b5c;
+        }
+
+        .empty p {
+
+            margin: 0;
+
+            font-size: 11px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 850px) {
+
+            .page {
+                width: calc(100% - 30px);
+            }
+
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+
+            .alumni-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                gap: 12px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <div class="brand">
+        College Alumni Portal
+    </div>
+
+    <div class="nav-links">
+
+        <a href="{{ url_for('student_dashboard') }}"
+           class="{% if request.endpoint == 'student_dashboard' %}active{% endif %}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('find_alumni') }}"
+           class="{% if request.endpoint == 'find_alumni' %}active{% endif %}">
+            Find Alumni
+        </a>
+
+        <a href="{{ url_for('student_connections') }}"
+           class="{% if request.endpoint == 'student_connections' %}active{% endif %}">
+            Connections
+        </a>
+
+        <a href="{{ url_for('messages') }}"
+           class="{% if request.endpoint == 'messages' %}active{% endif %}">
+            Messages
+        </a>
+
+        <a href="{{ url_for('student_dashboard') }}#tasks"
+           class="{% if request.args.get('section') == 'mentorship' %}active{% endif %}">
+            Mentorship
+        </a>
+
+        <a href="{{ url_for('student_dashboard') }}#tasks"
+           class="{% if request.args.get('section') == 'tasks' %}active{% endif %}">
+            Tasks
+        </a>
+
+    </div>
+
+    <div class="student-profile">
+
+        <div class="profile-circle">
+            {{ student.get("full_name", "S")[0]|upper }}
+        </div>
+
+        <div class="profile-info">
+
+            <span class="profile-name">
+                {{ student.get("full_name", "Student") }}
+            </span>
+
+            <span class="profile-role">
+                Student
+            </span>
+
+        </div>
+
+        <a href="{{ url_for('logout') }}" class="logout">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- ================= PAGE ================= -->
+
+<main class="page">
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <span class="college-badge">
+
+            {{ college.get(
+                "college_name",
+                "College Alumni Portal"
+            ) }}
+
+        </span>
+
+
+        <h1>
+            Find Alumni
+        </h1>
+
+
+        <p>
+            Connect with alumni from your college
+            for career guidance and mentorship.
+        </p>
+
+    </section>
+
+
+
+    <!-- SEARCH -->
+
+    <section class="search-card">
+
+        <form method="GET"
+              action="{{ url_for('find_alumni') }}"
+              class="search-form">
+
+            <input
+                type="text"
+                name="search"
+                value="{{ search }}"
+                placeholder="Search by name, company or job title..."
+            >
+
+
+            <select name="department">
+
+                <option value="">
+                    All Departments
+                </option>
+
+                {% for department in departments %}
+
+                    <option
+                        value="{{ department }}"
+                        {% if selected_department == department %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ department }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+
+            <button type="submit"
+                    class="search-btn">
+                Search
+            </button>
+
+        </form>
+
+        {% if search or selected_department %}
+
+            <div style="margin-top:10px;">
+
+                <a href="{{ url_for('find_alumni') }}"
+                   class="clear-btn">
+                    Clear Search
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+
+    <!-- DIRECTORY -->
+
+    <section class="directory-card">
+
+        <div class="directory-header">
+
+            <div>
+
+                <h2>
+                    Alumni Directory
+                </h2>
+
+                <span class="directory-count">
+                    {{ alumni|length }} alumni found
+                </span>
+
+            </div>
+
+        </div>
+
+
+        {% if alumni %}
+
+            <div class="alumni-grid">
+
+                {% for item in alumni %}
+
+                    <div class="alumni-card">
+
+
+                        <div class="alumni-avatar">
+
+                            {{ item.get(
+                                "full_name",
+                                "A"
+                            )[0]|upper }}
+
+                        </div>
+
+
+                        <div class="alumni-details">
+
+                            <h3>
+                                {{ item.get(
+                                    "full_name",
+                                    "Alumni"
+                                ) }}
+                            </h3>
+
+
+                            <span class="job-title">
+
+                                {{ item.get(
+                                    "job_title",
+                                    "Professional"
+                                ) }}
+
+                            </span>
+
+
+                            <span class="company">
+
+                                {{ item.get(
+                                    "company",
+                                    "Company"
+                                ) }}
+
+                            </span>
+
+
+                            {% if item.get("department") %}
+
+                                <span class="department">
+
+                                    {{ item.get("department") }}
+
+                                </span>
+
+                            {% endif %}
+
+
+                            {% if item.get("mentorship") == "yes" %}
+
+                                <span class="mentor">
+
+                                    Mentor Available
+
+                                </span>
+
+                            {% endif %}
+
+
+                            <div class="actions">
+
+                                <a href="{{ url_for(
+                                    'alumni_profile',
+                                    alumni_id=item['_id']
+                                ) }}"
+                                   class="btn btn-outline">
+
+                                    View Profile
+
+                                </a>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="empty">
+
+                <h3>
+                    No Alumni Found
+                </h3>
+
+                <p>
+                    No approved alumni match your search.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+</main>
+
+
+</body>
+
+</html>

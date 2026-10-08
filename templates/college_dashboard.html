@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>College Admin Dashboard - College Alumni Portal</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #173452;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .top-navbar {
+
+            height: 74px;
+
+            background: white;
+
+            border-bottom: 1px solid #e7eaf0;
+
+            display: grid;
+
+            grid-template-columns: 1fr auto 1fr;
+
+            align-items: center;
+
+            padding: 0 45px;
+        }
+
+        .brand {
+
+            text-decoration: none;
+
+            color: #173452;
+
+            font-size: 21px;
+
+            font-weight: 700;
+        }
+
+        .nav-links {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 32px;
+        }
+
+        .nav-links a {
+
+            text-decoration: none;
+
+            color: #596579;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            padding: 27px 0;
+
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+
+            color: #4d35f5;
+        }
+
+        .nav-links a.active {
+
+            color: #4d35f5;
+
+            border-bottom: 3px solid #4d35f5;
+        }
+
+        .admin-profile {
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+        .admin-avatar {
+
+            width: 38px;
+
+            height: 38px;
+
+            border-radius: 50%;
+
+            background: #4d35f5;
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-weight: 700;
+        }
+
+        .admin-name {
+
+            font-size: 13px;
+
+            font-weight: 700;
+        }
+
+        .admin-role {
+
+            font-size: 11px;
+
+            color: #7b8494;
+
+            margin-top: 3px;
+        }
+
+        /* ================= MAIN ================= */
+
+        .container {
+
+            width: 92%;
+
+            max-width: 1400px;
+
+            margin: 35px auto 60px;
+        }
+
+        .page-header {
+
+            margin-bottom: 28px;
+        }
+
+        .page-header h1 {
+
+            font-size: 30px;
+
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+
+            font-size: 14px;
+
+            color: #7b8494;
+        }
+
+        .college-name {
+
+            color: #4d35f5;
+
+            font-weight: 700;
+        }
+
+        /* ================= FLASH ================= */
+
+        .flash {
+
+            padding: 13px 18px;
+
+            border-radius: 8px;
+
+            margin-bottom: 20px;
+
+            font-size: 13px;
+        }
+
+        .flash.success {
+
+            background: #eaf8f0;
+
+            color: #167344;
+        }
+
+        .flash.error {
+
+            background: #fff0f0;
+
+            color: #c43b3b;
+        }
+
+        /* ================= STATS ================= */
+
+        .stats-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+
+            background: white;
+
+            border: 1px solid #e8ebf2;
+
+            border-radius: 12px;
+
+            padding: 22px;
+
+            box-shadow: 0 5px 20px rgba(23, 52, 82, 0.05);
+        }
+
+        .stat-title {
+
+            color: #7b8494;
+
+            font-size: 12px;
+
+            margin-bottom: 10px;
+        }
+
+        .stat-number {
+
+            font-size: 30px;
+
+            font-weight: 700;
+
+            color: #173452;
+        }
+
+        .stat-link {
+
+            display: inline-block;
+
+            margin-top: 10px;
+
+            font-size: 12px;
+
+            color: #4d35f5;
+
+            text-decoration: none;
+
+            font-weight: 600;
+        }
+
+        /* ================= SECTIONS ================= */
+
+        .section {
+
+            background: white;
+
+            border: 1px solid #e8ebf2;
+
+            border-radius: 12px;
+
+            margin-bottom: 25px;
+
+            overflow: hidden;
+
+            box-shadow: 0 5px 20px rgba(23, 52, 82, 0.05);
+        }
+
+        .section-header {
+
+            padding: 20px 24px;
+
+            border-bottom: 1px solid #edf0f5;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+        .section-header h2 {
+
+            font-size: 18px;
+        }
+
+        .section-header span {
+
+            font-size: 12px;
+
+            color: #7b8494;
+        }
+
+        .table-wrapper {
+
+            overflow-x: auto;
+        }
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 800px;
+        }
+
+        th {
+
+            background: #f8f9fc;
+
+            text-align: left;
+
+            padding: 14px 20px;
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            color: #737d8d;
+        }
+
+        td {
+
+            padding: 15px 20px;
+
+            border-top: 1px solid #edf0f5;
+
+            font-size: 13px;
+
+            color: #465469;
+        }
+
+        tbody tr:hover {
+
+            background: #fafaff;
+        }
+
+        /* ================= STATUS ================= */
+
+        .status {
+
+            display: inline-block;
+
+            padding: 6px 10px;
+
+            border-radius: 6px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+        .status.pending {
+
+            background: #fff7e6;
+
+            color: #a96c00;
+        }
+
+        .status.approved {
+
+            background: #eaf8f0;
+
+            color: #167344;
+        }
+
+        .status.rejected {
+
+            background: #fff0f0;
+
+            color: #c43b3b;
+        }
+
+        /* ================= BUTTONS ================= */
+
+        .btn {
+
+            display: inline-block;
+
+            padding: 8px 13px;
+
+            border-radius: 7px;
+
+            text-decoration: none;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            margin-right: 5px;
+
+            border: none;
+
+            cursor: pointer;
+        }
+
+        .btn-approve {
+
+            background: #eaf8f0;
+
+            color: #167344;
+        }
+
+        .btn-reject {
+
+            background: #fff0f0;
+
+            color: #c43b3b;
+        }
+
+        .btn:hover {
+
+            opacity: 0.8;
+        }
+
+        /* ================= EMPTY ================= */
+
+        .empty {
+
+            padding: 35px;
+
+            text-align: center;
+
+            color: #7b8494;
+
+            font-size: 13px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media(max-width: 1000px) {
+
+            .stats-grid {
+
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .top-navbar {
+
+                grid-template-columns: 1fr;
+
+                height: auto;
+
+                gap: 15px;
+
+                padding: 18px;
+            }
+
+            .brand {
+
+                text-align: center;
+            }
+
+            .nav-links {
+
+                flex-wrap: wrap;
+            }
+
+            .admin-profile {
+
+                justify-content: center;
+            }
+        }
+
+        @media(max-width: 600px) {
+
+            .stats-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+
+                width: 94%;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="top-navbar">
+
+    <a href="{{ url_for('home') }}" class="brand">
+        College Alumni Portal
+    </a>
+
+    <div class="nav-links">
+
+        <a href="{{ url_for('home') }}">
+            Home
+        </a>
+
+        <a href="{{ url_for('college_admin_dashboard') }}"
+           class="active">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('college_admin_students') }}">
+            Students
+        </a>
+
+        <a href="{{ url_for('college_admin_alumni') }}">
+            Alumni
+        </a>
+
+        <a href="{{ url_for('college_admin_announcements') }}">
+            Announcements
+        </a>
+
+    </div>
+
+    <div class="admin-profile">
+
+    <div class="admin-avatar">
+        CA
+    </div>
+
+    <div>
+
+        <div class="admin-name">
+            College Admin
+        </div>
+
+        <div class="admin-role">
+            {{ college.get('college_name', 'College Administrator') }}
+        </div>
+
+    </div>
+
+    <a href="{{ url_for('logout') }}" class="college-logout">
+        Logout
+    </a>
+
+</div>
+
+</nav>
+
+<!-- ================= MAIN ================= -->
+
+<main class="container">
+
+
+    <div class="page-header">
+
+        <h1>
+            College Admin Dashboard
+        </h1>
+
+        <p>
+            Manage students, alumni and activities for
+            <span class="college-name">
+                {{ college.get('college_name', 'Your College') }}
+            </span>
+        </p>
+
+    </div>
+
+
+    <!-- ================= FLASH ================= -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="flash {{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+
+    <!-- ================= STATISTICS ================= -->
+
+    <div class="stats-grid">
+
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                TOTAL STUDENTS
+            </div>
+
+            <div class="stat-number">
+                {{ total_students }}
+            </div>
+
+            <a href="#students" class="stat-link">
+                View Students
+            </a>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                PENDING STUDENTS
+            </div>
+
+            <div class="stat-number">
+                {{ pending_students }}
+            </div>
+
+            <a href="#student-approvals" class="stat-link">
+                Review Requests
+            </a>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                TOTAL ALUMNI
+            </div>
+
+            <div class="stat-number">
+                {{ total_alumni }}
+            </div>
+
+            <a href="#alumni" class="stat-link">
+                View Alumni
+            </a>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                PENDING ALUMNI
+            </div>
+
+            <div class="stat-number">
+                {{ pending_alumni }}
+            </div>
+
+            <a href="#alumni-approvals" class="stat-link">
+                Review Requests
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================= STUDENT APPROVALS ================= -->
+
+    <section class="section" id="student-approvals">
+
+        <div class="section-header">
+
+            <h2>
+                Pending Student Approvals
+            </h2>
+
+            <span>
+                {{ pending_students }} pending
+            </span>
+
+        </div>
+
+
+        {% if pending_student_list %}
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Name
+                        </th>
+
+                        <th>
+                            Email
+                        </th>
+
+                        <th>
+                            Department
+                        </th>
+
+                        <th>
+                            Year
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for student in pending_student_list %}
+
+                    <tr>
+
+                        <td>
+                            {{ student.get('full_name', '-') }}
+                        </td>
+
+                        <td>
+                            {{ student.get('email', '-') }}
+                        </td>
+
+                        <td>
+                            {{ student.get('department', '-') }}
+                        </td>
+
+                        <td>
+                            {{ student.get('year', '-') }}
+                        </td>
+
+                        <td>
+
+                            <span class="status pending">
+                                Pending
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{{ url_for(
+                                    'college_admin_approve_student',
+                                    student_id=student['_id']
+                                ) }}"
+                                class="btn btn-approve"
+                            >
+                                Approve
+                            </a>
+
+
+                            <a
+                                href="{{ url_for(
+                                    'college_admin_reject_student',
+                                    student_id=student['_id']
+                                ) }}"
+                                class="btn btn-reject"
+                            >
+                                Reject
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty">
+            No pending student registrations.
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+
+    <!-- ================= ALUMNI APPROVALS ================= -->
+
+    <section class="section" id="alumni-approvals">
+
+        <div class="section-header">
+
+            <h2>
+                Pending Alumni Approvals
+            </h2>
+
+            <span>
+                {{ pending_alumni }} pending
+            </span>
+
+        </div>
+
+
+        {% if pending_alumni_list %}
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Name
+                        </th>
+
+                        <th>
+                            Email
+                        </th>
+
+                        <th>
+                            Department
+                        </th>
+
+                        <th>
+                            Graduation Year
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for alumni in pending_alumni_list %}
+
+                    <tr>
+
+                        <td>
+                            {{ alumni.get('full_name', '-') }}
+                        </td>
+
+                        <td>
+                            {{ alumni.get('email', '-') }}
+                        </td>
+
+                        <td>
+                            {{ alumni.get('department', '-') }}
+                        </td>
+
+                        <td>
+                            {{ alumni.get(
+                                'graduation_year',
+                                alumni.get('year', '-')
+                            ) }}
+                        </td>
+
+                        <td>
+
+                            <span class="status pending">
+                                Pending
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{{ url_for(
+                                    'college_admin_approve_alumni',
+                                    alumni_id=alumni['_id']
+                                ) }}"
+                                class="btn btn-approve"
+                            >
+                                Approve
+                            </a>
+
+
+                            <a
+                                href="{{ url_for(
+                                    'college_admin_reject_alumni',
+                                    alumni_id=alumni['_id']
+                                ) }}"
+                                class="btn btn-reject"
+                            >
+                                Reject
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty">
+            No pending alumni registrations.
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+
+    <!-- ================= RECENT STUDENTS ================= -->
+
+    <section class="section" id="students">
+
+        <div class="section-header">
+
+            <h2>
+                Recent Students
+            </h2>
+
+            <span>
+                Latest registrations
+            </span>
+
+        </div>
+
+
+        {% if recent_students %}
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Name
+                        </th>
+
+                        <th>
+                            Email
+                        </th>
+
+                        <th>
+                            Department
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for student in recent_students %}
+
+                    <tr>
+
+                        <td>
+                            {{ student.get('full_name', '-') }}
+                        </td>
+
+                        <td>
+                            {{ student.get('email', '-') }}
+                        </td>
+
+                        <td>
+                            {{ student.get('department', '-') }}
+                        </td>
+
+                        <td>
+
+                            {% set status = student.get('status', 'Pending') %}
+
+                            <span class="status {{ status|lower }}">
+                                {{ status }}
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty">
+            No students registered yet.
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+
+    <!-- ================= RECENT ALUMNI ================= -->
+
+    <section class="section" id="alumni">
+
+        <div class="section-header">
+
+            <h2>
+                Recent Alumni
+            </h2>
+
+            <span>
+                Latest registrations
+            </span>
+
+        </div>
+
+
+        {% if recent_alumni %}
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Name
+                        </th>
+
+                        <th>
+                            Email
+                        </th>
+
+                        <th>
+                            Department
+                        </th>
+
+                        <th>
+                            Company
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for alumni in recent_alumni %}
+
+                    <tr>
+
+                        <td>
+                            {{ alumni.get('full_name', '-') }}
+                        </td>
+
+                        <td>
+                            {{ alumni.get('email', '-') }}
+                        </td>
+
+                        <td>
+                            {{ alumni.get('department', '-') }}
+                        </td>
+
+                        <td>
+                            {{ alumni.get('company', '-') }}
+                        </td>
+
+                        <td>
+
+                            {% set status = alumni.get('status', 'Pending') %}
+
+                            <span class="status {{ status|lower }}">
+                                {{ status }}
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty">
+            No alumni registered yet.
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+</main>
+
+</body>
+</html>

@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Student Dashboard - College Alumni Portal</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6fb;
+            color: #173b5c;
+        }
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .navbar {
+            height: 68px;
+            background: white;
+            border-bottom: 1px solid #e4e8ef;
+
+            display: flex;
+            align-items: center;
+
+            padding: 0 28px;
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: #173b5c;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+
+            margin-left: auto;
+            margin-right: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #53657a;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            padding: 24px 0;
+
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #4f35f5;
+        }
+
+        .nav-links a.active {
+            color: #4f35f5;
+        }
+
+        .nav-links a.active::after {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            height: 3px;
+
+            background: #4f35f5;
+        }
+
+        .student-profile {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .profile-circle {
+            width: 34px;
+            height: 34px;
+
+            border-radius: 50%;
+
+            background: #4f35f5;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .profile-name {
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .profile-role {
+            font-size: 10px;
+            color: #7b8794;
+        }
+
+        .logout {
+            margin-left: 12px;
+
+            text-decoration: none;
+
+            color: #6b7280;
+
+            font-size: 11px;
+        }
+
+        /* =====================================================
+           PAGE
+        ===================================================== */
+
+        .page {
+            width: calc(100% - 34px);
+            max-width: 1600px;
+
+            margin: 22px auto 45px;
+        }
+
+        /* =====================================================
+           FLASH
+        ===================================================== */
+
+        .flash {
+            max-width: 930px;
+            margin: 0 auto 20px;
+
+            padding: 10px 15px;
+
+            border-radius: 7px;
+
+            font-size: 13px;
+        }
+
+        .flash.success {
+            background: #dff4e8;
+            color: #12663d;
+        }
+
+        .flash.error {
+            background: #ffe7e7;
+            color: #a61b1b;
+        }
+
+        /* =====================================================
+           WELCOME
+        ===================================================== */
+
+        .welcome-card {
+
+            min-height: 126px;
+
+            padding: 25px 25px;
+
+            border-radius: 12px;
+
+            background: linear-gradient(
+                110deg,
+                #4938df,
+                #2678df,
+                #0bb3c9
+            );
+
+            color: white;
+
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            box-shadow:
+                0 7px 20px rgba(49, 79, 190, 0.18);
+        }
+
+        .college-badge {
+
+            display: inline-block;
+
+            background: white;
+
+            color: #4f35f5;
+
+            padding: 5px 11px;
+
+            border-radius: 15px;
+
+            font-size: 10px;
+            font-weight: 700;
+
+            margin-bottom: 8px;
+        }
+
+        .welcome-card h1 {
+            margin: 0;
+
+            font-size: 25px;
+
+            color: white;
+        }
+
+        .welcome-card p {
+            margin: 7px 0 0;
+
+            font-size: 12px;
+
+            color: white;
+        }
+
+        .welcome-actions {
+            display: flex;
+            gap: 9px;
+        }
+
+        .welcome-btn {
+
+            text-decoration: none;
+
+            padding: 10px 16px;
+
+            border-radius: 6px;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            background: white;
+
+            color: #2366e8;
+        }
+
+        .welcome-btn.secondary {
+
+            background: rgba(255,255,255,0.12);
+
+            border: 1px solid rgba(255,255,255,0.7);
+
+            color: white;
+        }
+
+        /* =====================================================
+           PROFILE COMPLETION
+        ===================================================== */
+
+        .profile-card {
+
+            background: white;
+
+            border: 1px solid #e1e7ef;
+
+            border-radius: 9px;
+
+            padding: 18px;
+
+            margin-top: 22px;
+        }
+
+        .section-heading {
+
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 10px;
+        }
+
+        .section-heading h2 {
+
+            margin: 0;
+
+            font-size: 14px;
+
+            color: #173b5c;
+        }
+
+        .completion {
+
+            font-size: 13px;
+
+            color: #1265ef;
+
+            font-weight: 700;
+        }
+
+        .progress-background {
+
+            height: 8px;
+
+            background: #e8ebf0;
+
+            border-radius: 8px;
+
+            overflow: hidden;
+        }
+
+        .progress {
+
+            height: 100%;
+
+            background: linear-gradient(
+                90deg,
+                #226df3,
+                #2088ed
+            );
+
+            border-radius: 8px;
+        }
+
+        .profile-bottom {
+
+            margin-top: 9px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            font-size: 11px;
+
+            color: #66778a;
+        }
+
+        .profile-bottom a {
+
+            color: #1265ef;
+
+            font-weight: 600;
+
+            text-decoration: none;
+        }
+
+        /* =====================================================
+           MAIN GRID
+        ===================================================== */
+
+        .dashboard-grid {
+
+            display: grid;
+
+            grid-template-columns: minmax(0, 2.1fr)
+                                   minmax(290px, 1fr);
+
+            gap: 18px;
+
+            margin-top: 18px;
+        }
+
+        .left-column,
+        .right-column {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 18px;
+        }
+
+        .card {
+
+            background: white;
+
+            border: 1px solid #e1e7ef;
+
+            border-radius: 9px;
+
+            overflow: hidden;
+        }
+
+        .card-header {
+
+            padding: 17px 18px;
+
+            border-bottom: 1px solid #e7ebf0;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+        .card-header h2 {
+
+            margin: 0;
+
+            font-size: 15px;
+
+            color: #173b5c;
+        }
+
+        .card-header p {
+
+            margin: 5px 0 0;
+
+            font-size: 11px;
+
+            color: #718096;
+        }
+
+        .view-link {
+
+            text-decoration: none;
+
+            border: 1px solid #4f8df7;
+
+            color: #2366e8;
+
+            padding: 7px 11px;
+
+            border-radius: 5px;
+
+            font-size: 10px;
+        }
+
+        /* =====================================================
+           ALUMNI
+        ===================================================== */
+
+        .alumni-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 12px;
+
+            padding: 14px 17px 17px;
+        }
+
+        .alumni-card {
+
+            border: 1px solid #dfe5ed;
+
+            border-radius: 8px;
+
+            padding: 13px;
+
+            display: flex;
+
+            gap: 11px;
+        }
+
+        .alumni-avatar {
+
+            flex-shrink: 0;
+
+            width: 42px;
+            height: 42px;
+
+            border-radius: 50%;
+
+            background: #4f35f5;
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-weight: 700;
+        }
+
+        .alumni-info {
+
+            min-width: 0;
+        }
+
+        .alumni-info h3 {
+
+            margin: 0;
+
+            font-size: 13px;
+
+            color: #173b5c;
+        }
+
+        .job {
+
+            display: block;
+
+            margin-top: 3px;
+
+            color: #1265ef;
+
+            font-size: 11px;
+
+            font-weight: 600;
+        }
+
+        .company {
+
+            display: block;
+
+            margin-top: 3px;
+
+            color: #718096;
+
+            font-size: 10px;
+        }
+
+        .mentor-badge {
+
+            display: inline-block;
+
+            margin-top: 6px;
+
+            padding: 4px 7px;
+
+            border-radius: 10px;
+
+            background: #dcf8e8;
+
+            color: #16834b;
+
+            font-size: 9px;
+
+            font-weight: 600;
+        }
+
+        .alumni-actions {
+
+            display: flex;
+
+            gap: 6px;
+
+            margin-top: 8px;
+        }
+
+        .small-btn {
+
+            text-decoration: none;
+
+            padding: 5px 8px;
+
+            border-radius: 4px;
+
+            font-size: 9px;
+
+            border: 1px solid #cdd5df;
+
+            color: #526579;
+
+            background: white;
+        }
+
+        .small-btn.primary {
+
+            background: #146ff2;
+
+            color: white;
+
+            border-color: #146ff2;
+        }
+
+        .empty {
+
+            padding: 35px;
+
+            text-align: center;
+
+            color: #7b8794;
+
+            font-size: 12px;
+        }
+
+        /* =====================================================
+           TASKS
+        ===================================================== */
+
+        .task {
+
+            padding: 13px 17px;
+
+            border-bottom: 1px solid #e7ebf0;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 15px;
+        }
+
+        .task:last-child {
+            border-bottom: none;
+        }
+
+        .task h3 {
+
+            margin: 0;
+
+            font-size: 12px;
+
+            color: #173b5c;
+        }
+
+        .task p {
+
+            margin: 5px 0 0;
+
+            font-size: 10px;
+
+            color: #718096;
+        }
+
+        .task-status {
+
+            flex-shrink: 0;
+
+            align-self: center;
+
+            padding: 5px 8px;
+
+            border-radius: 5px;
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            background: #fff1cc;
+
+            color: #946200;
+        }
+
+        /* =====================================================
+           ANNOUNCEMENTS
+        ===================================================== */
+
+        .announcement {
+
+            padding: 15px 17px;
+
+            border-bottom: 1px solid #e7ebf0;
+        }
+
+        .announcement:last-child {
+            border-bottom: none;
+        }
+
+        .announcement h3 {
+
+            margin: 0;
+
+            font-size: 12px;
+
+            color: #173b5c;
+        }
+
+        .announcement p {
+
+            margin: 6px 0;
+
+            font-size: 10px;
+
+            line-height: 1.55;
+
+            color: #617286;
+        }
+
+        .announcement-date {
+
+            font-size: 9px;
+
+            color: #8795a1;
+        }
+
+        /* =====================================================
+           INSTITUTION
+        ===================================================== */
+
+        .institution {
+
+            padding: 18px;
+        }
+
+        .institution-name {
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            color: #173b5c;
+
+            margin-bottom: 5px;
+        }
+
+        .institution-details {
+
+            font-size: 10px;
+
+            color: #718096;
+
+            line-height: 1.8;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1000px) {
+
+            .nav-links {
+                gap: 12px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .right-column {
+                display: grid;
+
+                grid-template-columns: 1fr 1fr;
+            }
+
+        }
+
+        @media (max-width: 750px) {
+
+            .navbar {
+                height: auto;
+
+                padding: 15px;
+
+                flex-wrap: wrap;
+            }
+
+            .nav-links {
+
+                order: 3;
+
+                width: 100%;
+
+                margin: 0;
+
+                overflow-x: auto;
+
+                justify-content: center;
+            }
+
+            .nav-links a {
+                padding: 10px 0;
+
+                white-space: nowrap;
+            }
+
+            .student-profile {
+                margin-left: auto;
+            }
+
+            .welcome-card {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 18px;
+            }
+
+            .alumni-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+            .right-column {
+
+                display: flex;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+    <div class="brand">
+        College Alumni Portal
+    </div>
+
+    <div class="nav-links">
+
+        <a href="{{ url_for('student_dashboard') }}"
+           class="{% if request.endpoint == 'student_dashboard' %}active{% endif %}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('find_alumni') }}"
+           class="{% if request.endpoint == 'find_alumni' %}active{% endif %}">
+            Find Alumni
+        </a>
+
+        <a href="{{ url_for('student_connections') }}"
+           class="{% if request.endpoint == 'student_connections' %}active{% endif %}">
+            Connections
+        </a>
+
+        <a href="{{ url_for('messages') }}"
+           class="{% if request.endpoint == 'messages' %}active{% endif %}">
+            Messages
+        </a>
+
+        <a href="{{ url_for('student_mentorship') }}"
+           class="{% if request.endpoint == 'student_mentorship' %}active{% endif %}">
+            Mentorship
+        </a>
+
+        <a href="{{ url_for('student_tasks') }}"
+           class="{% if request.endpoint == 'student_tasks' %}active{% endif %}">
+            Tasks
+        </a>
+
+    </div>
+
+    <div class="student-profile">
+
+        <div class="profile-circle">
+            {{ student.get("full_name", "S")[0]|upper }}
+        </div>
+
+        <div class="profile-info">
+            <span class="profile-name">
+                {{ student.get("full_name", "Student") }}
+            </span>
+
+            <span class="profile-role">
+                Student
+            </span>
+        </div>
+
+        <a href="{{ url_for('logout') }}" class="logout">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- =====================================================
+     PAGE
+===================================================== -->
+
+<main class="page">
+
+
+    <!-- FLASH -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="flash {{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+
+    <!-- =================================================
+         WELCOME
+    ================================================== -->
+
+    <section class="welcome-card">
+
+        <div>
+
+            <span class="college-badge">
+
+                {{ college.get(
+                    "college_name",
+                    "College Alumni Portal"
+                ) }}
+
+            </span>
+
+
+            <h1>
+
+                Welcome back,
+                {{ student.get("full_name", "Student") }}!
+
+            </h1>
+
+
+            <p>
+
+                {{ student.get("degree", "B.Tech") }}
+
+                in
+
+                {{ student.get("department", "") }}
+
+                • Batch
+
+                {{ student.get("batch", "") }}
+
+            </p>
+
+        </div>
+
+
+        <div class="welcome-actions">
+
+            <a href="{{ url_for('find_alumni') }}"
+               class="welcome-btn">
+
+                Find Alumni Mentors
+
+            </a>
+
+
+            <a href="{{ url_for('messages') }}"
+               class="welcome-btn secondary">
+                Messages
+            </a>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         PROFILE COMPLETION
+    ================================================== -->
+
+    <section class="profile-card">
+
+        <div class="section-heading">
+
+            <h2>
+                Profile Completion Level
+            </h2>
+
+            <span class="completion">
+                {{ profile_completion }}%
+            </span>
+
+        </div>
+
+
+        <div class="progress-background">
+
+            <div class="progress"
+                 style="width: {{ profile_completion }}%;">
+            </div>
+
+        </div>
+
+
+        <div class="profile-bottom">
+
+            <span>
+                Complete your profile details to get better alumni mentor recommendations.
+            </span>
+
+            <a href="#">
+                Update Profile →
+            </a>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         MAIN GRID
+    ================================================== -->
+
+    <div class="dashboard-grid">
+
+
+        <!-- =================================================
+             LEFT COLUMN
+        ================================================= -->
+
+        <div class="left-column">
+
+
+            <!-- ================= ALUMNI ================= -->
+
+            <section class="card"
+                     id="alumni">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h2>
+                            Alumni Suggestions
+                        </h2>
+
+                        <p>
+                            Alumni from your college who may help you with career guidance.
+                        </p>
+
+                    </div>
+
+
+                    <a href="{{ url_for('find_alumni') }}"
+                       class="view-link">
+
+                        View Directory
+
+                    </a>
+
+                </div>
+
+
+                <div class="alumni-grid">
+
+                    {% if alumni_suggestions %}
+
+
+                        {% for alumni in alumni_suggestions %}
+
+                            <div class="alumni-card">
+
+
+                                <div class="alumni-avatar">
+
+                                    {{ alumni.get(
+                                        "full_name",
+                                        "A"
+                                    )[0]|upper }}
+
+                                </div>
+
+
+                                <div class="alumni-info">
+
+                                    <h3>
+                                        {{ alumni.get(
+                                            "full_name",
+                                            "Alumni"
+                                        ) }}
+                                    </h3>
+
+
+                                    <span class="job">
+
+                                        {{ alumni.get(
+                                            "job_title",
+                                            "Professional"
+                                        ) }}
+
+                                    </span>
+
+
+                                    <span class="company">
+
+                                        {{ alumni.get(
+                                            "company",
+                                            "Company"
+                                        ) }}
+
+                                        {% if alumni.get("batch") %}
+
+                                            • Batch
+                                            {{ alumni.get("batch") }}
+
+                                        {% endif %}
+
+                                    </span>
+
+
+                                    {% if alumni.get("mentorship") == "yes" %}
+
+                                        <span class="mentor-badge">
+
+                                            Mentor Available
+
+                                        </span>
+
+                                    {% endif %}
+
+
+                                    <div class="alumni-actions">
+
+                                        <a href="{{ url_for(
+                                            'alumni_profile',
+                                            alumni_id=alumni['_id']
+                                        ) }}"
+                                           class="small-btn">
+
+                                            View Profile
+
+                                        </a>
+
+
+                                        <a href="{{ url_for('messages') }}"
+                                           class="small-btn primary">
+
+                                            Message
+
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+
+                    {% else %}
+
+                        <div class="empty">
+
+                            No approved alumni are available yet.
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </section>
+
+
+
+            <!-- ================= TASKS ================= -->
+
+            <section class="card"
+                     id="tasks">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h2>
+                            My Learning & Mentorship Tasks
+                        </h2>
+
+                        <p>
+                            Track tasks and activities assigned by your mentors.
+                        </p>
+
+                    </div>
+
+                    <a href="#"
+                       class="view-link">
+
+                        View All Tasks
+
+                    </a>
+
+                </div>
+
+
+                {% if tasks %}
+
+
+                    {% for task in tasks %}
+
+                        <div class="task">
+
+                            <div>
+
+                                <h3>
+
+                                    {{ task.get(
+                                        "title",
+                                        "Task"
+                                    ) }}
+
+                                </h3>
+
+
+                                <p>
+
+                                    {{ task.get(
+                                        "description",
+                                        ""
+                                    ) }}
+
+                                </p>
+
+                            </div>
+
+
+                            <span class="task-status">
+
+                                {{ task.get(
+                                    "status",
+                                    "Pending"
+                                ) }}
+
+                            </span>
+
+                        </div>
+
+                    {% endfor %}
+
+
+                {% else %}
+
+                    <div class="empty">
+
+                        No mentorship tasks yet.
+
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             RIGHT COLUMN
+        ================================================= -->
+
+        <div class="right-column">
+
+
+            <!-- ================= ANNOUNCEMENTS ================= -->
+
+            <section class="card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h2>
+                            College Announcements
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                {% if announcements %}
+
+
+                    {% for announcement in announcements %}
+
+                        <div class="announcement">
+
+                            <h3>
+
+                                {{ announcement.get(
+                                    "title",
+                                    "Announcement"
+                                ) }}
+
+                            </h3>
+
+
+                            <p>
+
+                                {{ announcement.get(
+                                    "message",
+                                    announcement.get(
+                                        "description",
+                                        ""
+                                    )
+                                ) }}
+
+                            </p>
+
+
+                            <span class="announcement-date">
+
+                                {% if announcement.get("created_at") %}
+
+                                    {{ announcement.get(
+                                        "created_at"
+                                    ).strftime(
+                                        "%b %d, %Y"
+                                    ) }}
+
+                                {% else %}
+
+                                    Recently published
+
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+                    {% endfor %}
+
+
+                {% else %}
+
+                    <div class="empty">
+
+                        No announcements available.
+
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+
+
+            <!-- ================= INSTITUTION ================= -->
+
+            <section class="card">
+
+                <div class="card-header">
+
+                    <h2>
+                        Institution Info
+                    </h2>
+
+                </div>
+
+
+                <div class="institution">
+
+                    <div class="institution-name">
+
+                        {{ college.get(
+                            "college_name",
+                            "College"
+                        ) }}
+
+                    </div>
+
+
+                    <div class="institution-details">
+
+                        {% if college.get("university") %}
+
+                            {{ college.get("university") }}
+
+                            <br>
+
+                        {% endif %}
+
+
+                        {% if college.get("city") %}
+
+                            {{ college.get("city") }}
+
+                        {% endif %}
+
+
+                        {% if college.get("state") %}
+
+                            , {{ college.get("state") }}
+
+                        {% endif %}
+
+
+                        {% if college.get("email") %}
+
+                            <br>
+
+                            {{ college.get("email") }}
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+        </div>
+
+    </div>
+
+</main>
+
+
+</body>
+
+</html>

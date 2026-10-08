@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Announcements - College Alumni Portal</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6fb;
+            color: #183b5b;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            height: 72px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 40px;
+        }
+
+        .brand {
+            font-size: 21px;
+            font-weight: 700;
+            color: #173b5c;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 34px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #334e68;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 27px 0;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #4f35f5;
+        }
+
+        .nav-links a.active {
+            color: #4f35f5;
+        }
+
+        .nav-links a.active::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -1px;
+            height: 3px;
+            background: #4f35f5;
+            border-radius: 3px 3px 0 0;
+        }
+
+        /* ================= ADMIN PROFILE ================= */
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .profile-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+
+            background: #4f35f5;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .profile-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #183b5b;
+        }
+
+        .profile-role {
+            font-size: 10px;
+            color: #7b8794;
+        }
+
+        /* ================= MAIN ================= */
+
+        .container {
+            width: calc(100% - 32px);
+            max-width: 1200px;
+
+            margin: 32px auto 60px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            margin: 0;
+            font-size: 29px;
+            color: #183b5b;
+        }
+
+        .page-description {
+            margin: 7px 0 0;
+            font-size: 13px;
+            color: #718096;
+        }
+
+        .college-name {
+            color: #4f35f5;
+            font-weight: 700;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            border: 1px solid #d9deea;
+            background: white;
+            color: #4f35f5;
+
+            padding: 10px 17px;
+            border-radius: 7px;
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .back-btn:hover {
+            background: #f6f4ff;
+        }
+
+        /* ================= CREATE ANNOUNCEMENT ================= */
+
+        .card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+
+            box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
+
+            margin-bottom: 22px;
+        }
+
+        .card-header {
+            padding: 18px 21px;
+            border-bottom: 1px solid #edf0f5;
+        }
+
+        .card-header h2 {
+            margin: 0;
+            font-size: 17px;
+            color: #173b5c;
+        }
+
+        .card-body {
+            padding: 22px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+
+            font-size: 13px;
+            font-weight: 600;
+            color: #334e68;
+        }
+
+        .form-control {
+            width: 100%;
+
+            border: 1px solid #d9e0ea;
+            border-radius: 7px;
+
+            padding: 11px 13px;
+
+            font-family: inherit;
+            font-size: 13px;
+
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: #4f35f5;
+            box-shadow: 0 0 0 2px rgba(79, 53, 245, 0.08);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 220px;
+            gap: 18px;
+        }
+
+        .publish-btn {
+            border: none;
+            background: #4f35f5;
+            color: white;
+
+            padding: 11px 22px;
+            border-radius: 7px;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+        .publish-btn:hover {
+            background: #4027d8;
+        }
+
+        /* ================= ANNOUNCEMENTS ================= */
+
+        .announcement-count {
+            float: right;
+            color: #718096;
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        .announcement {
+            padding: 21px 22px;
+            border-bottom: 1px solid #edf0f5;
+        }
+
+        .announcement:last-child {
+            border-bottom: none;
+        }
+
+        .announcement-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .announcement-title {
+            margin: 0;
+            color: #173b5c;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .announcement-date {
+            color: #8795a1;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .announcement-message {
+            margin: 9px 0 0;
+            color: #5d7185;
+            font-size: 13px;
+            line-height: 1.7;
+            white-space: pre-line;
+        }
+
+        .announcement-footer {
+            margin-top: 13px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .tag {
+            display: inline-block;
+
+            padding: 5px 9px;
+            border-radius: 5px;
+
+            background: #f0edff;
+            color: #4f35f5;
+
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        /* ================= EMPTY ================= */
+
+        .empty-state {
+            padding: 55px 20px;
+            text-align: center;
+            color: #7b8794;
+            font-size: 13px;
+        }
+
+        /* ================= FLASH ================= */
+
+        .flash-container {
+            margin-bottom: 20px;
+        }
+
+        .flash {
+            padding: 12px 15px;
+            border-radius: 7px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .flash.success {
+            background: #e9f8ef;
+            color: #177245;
+            border: 1px solid #c9eed8;
+        }
+
+        .flash.error {
+            background: #fff0f0;
+            color: #b42318;
+            border: 1px solid #ffd2d2;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 900px) {
+
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .profile-info {
+                display: none;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                height: auto;
+                padding: 15px 20px;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .nav-links {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                overflow-x: auto;
+            }
+
+            .nav-links a {
+                padding: 10px 0;
+                white-space: nowrap;
+            }
+
+            .container {
+                width: calc(100% - 24px);
+                margin-top: 22px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .announcement-top {
+                flex-direction: column;
+                gap: 6px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <nav class="navbar">
+
+        <div class="brand">
+            College Alumni Portal
+        </div>
+
+        <div class="nav-links">
+
+            <a href="{{ url_for('home') }}">
+                Home
+            </a>
+
+            <a href="{{ url_for('college_admin_dashboard') }}">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('college_admin_students') }}">
+                Students
+            </a>
+
+            <a href="{{ url_for('college_admin_alumni') }}">
+                Alumni
+            </a>
+
+            <a href="{{ url_for('college_admin_announcements') }}"
+               class="active">
+                Announcements
+            </a>
+
+        </div>
+
+        <div class="admin-profile">
+
+            <div class="profile-circle">
+                CA
+            </div>
+
+            <div class="profile-info">
+
+                <div class="profile-name">
+                    {{ college_admin.get('full_name', 'NEC Admin') }}
+                </div>
+
+                <div class="profile-role">
+                    College Administrator
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="container">
+
+        <div class="page-header">
+
+            <div>
+
+                <h1 class="page-title">
+                    Announcements
+                </h1>
+
+                <p class="page-description">
+                    Publish announcements for
+                    <span class="college-name">
+                        {{ college.get('college_name', 'Your College') }}
+                    </span>
+                </p>
+
+            </div>
+
+            <a href="{{ url_for('college_admin_dashboard') }}"
+               class="back-btn">
+                Back to Dashboard
+            </a>
+
+        </div>
+
+
+        <!-- ================= FLASH MESSAGES ================= -->
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                <div class="flash-container">
+
+                    {% for category, message in messages %}
+
+                        <div class="flash {{ category }}">
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <!-- ================= CREATE ================= -->
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h2>
+                    Create Announcement
+                </h2>
+
+            </div>
+
+            <div class="card-body">
+
+                <form method="POST"
+                      action="{{ url_for('college_admin_announcements') }}">
+
+                    <div class="form-group">
+
+                        <label for="title">
+                            Announcement Title
+                        </label>
+
+                        <input
+                            type="text"
+                            id="title"
+                            name="title"
+                            class="form-control"
+                            placeholder="Enter announcement title"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="message">
+                            Announcement Message
+                        </label>
+
+                        <textarea
+                            id="message"
+                            name="message"
+                            class="form-control"
+                            placeholder="Write your announcement here..."
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label for="target">
+                                Audience
+                            </label>
+
+                            <select
+                                id="target"
+                                name="target"
+                                class="form-control"
+                            >
+
+                                <option value="all">
+                                    All Students & Alumni
+                                </option>
+
+                                <option value="students">
+                                    Students
+                                </option>
+
+                                <option value="alumni">
+                                    Alumni
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div style="display:flex; align-items:flex-end; padding-bottom:17px;">
+
+                            <button
+                                type="submit"
+                                class="publish-btn"
+                            >
+                                Publish Announcement
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= EXISTING ANNOUNCEMENTS ================= -->
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h2>
+
+                    Published Announcements
+
+                    <span class="announcement-count">
+                        {{ announcements|length }} announcement(s)
+                    </span>
+
+                </h2>
+
+            </div>
+
+
+            {% if announcements %}
+
+                {% for announcement in announcements %}
+
+                    <div class="announcement">
+
+                        <div class="announcement-top">
+
+                            <h3 class="announcement-title">
+                                {{ announcement.get('title', 'Untitled Announcement') }}
+                            </h3>
+
+                            <span class="announcement-date">
+
+                                {% if announcement.get('created_at') %}
+
+                                    {{ announcement.get('created_at').strftime('%b %d, %Y %I:%M %p') }}
+
+                                {% else %}
+
+                                    Recently published
+
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+
+                        <p class="announcement-message">
+
+                            {{ announcement.get(
+                                'message',
+                                announcement.get(
+                                    'description',
+                                    'No message available.'
+                                )
+                            ) }}
+
+                        </p>
+
+
+                        <div class="announcement-footer">
+
+                            <span class="tag">
+
+                                {% if announcement.get('target') == 'students' %}
+
+                                    Students
+
+                                {% elif announcement.get('target') == 'alumni' %}
+
+                                    Alumni
+
+                                {% else %}
+
+                                    All Members
+
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="empty-state">
+
+                    No announcements have been published yet.
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

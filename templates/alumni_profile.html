@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Alumni Profile - College Alumni Portal</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="student-dashboard-body">
+
+<nav class="student-top-navbar">
+
+    <div class="student-brand">
+        <span>College Alumni Portal</span>
+    </div>
+
+    <div class="student-navbar-links">
+
+        <a href="{{ url_for('home') }}">Home</a>
+
+        <a href="{{ url_for('student_dashboard') }}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('find_alumni') }}">
+            Find Alumni
+        </a>
+
+        <a href="#">
+            Connections
+        </a>
+
+        <a href="#">
+            Messages
+        </a>
+
+        <a href="#">
+            Mentorship
+        </a>
+
+    </div>
+
+    <div class="student-profile">
+
+        <div class="student-profile-circle">
+            {{ student.get("full_name", "S")[0]|upper }}
+        </div>
+
+        <div class="student-profile-info">
+            <strong>
+                {{ student.get("full_name", "Student") }}
+            </strong>
+
+            <span>Student</span>
+        </div>
+
+        <a href="{{ url_for('logout') }}"
+           class="student-logout">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<main class="student-dashboard-page">
+
+    <!-- BACK -->
+
+    <div class="profile-back">
+
+        <a href="{{ url_for('find_alumni') }}">
+            ← Back to Alumni Directory
+        </a>
+
+    </div>
+
+
+    <!-- PROFILE -->
+
+    <section class="alumni-profile-card">
+
+        <div class="alumni-profile-header">
+
+            <div class="alumni-profile-avatar">
+                {{ alumni.get("full_name", "A")[0]|upper }}
+            </div>
+
+            <div class="alumni-profile-heading">
+
+                <h1>
+                    {{ alumni.get("full_name", "Alumni") }}
+                </h1>
+
+                <h3>
+                    {{ alumni.get(
+                        "job_title",
+                        "Professional"
+                    ) }}
+                </h3>
+
+                <p>
+                    {{ alumni.get(
+                        "company",
+                        "Company not specified"
+                    ) }}
+                </p>
+
+                <span>
+                    {{ alumni.get("degree", "") }}
+                    •
+                    {{ alumni.get("department", "") }}
+                    •
+                    Batch {{ alumni.get("batch", "") }}
+                </span>
+
+            </div>
+
+            <div class="alumni-profile-action">
+
+                {% if connection_status == "Accepted" %}
+
+                    <span class="connection-approved">
+                        Connected
+                    </span>
+
+                {% elif connection_status == "Pending" %}
+
+                    <span class="connection-pending">
+                        Request Pending
+                    </span>
+
+                {% else %}
+
+                    <a href="{{ url_for(
+                        'connect_alumni',
+                        alumni_id=alumni['_id']
+                    ) }}"
+                       class="student-primary-button">
+                        Connect
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- PROFILE INFORMATION -->
+
+        <div class="alumni-profile-grid">
+
+
+            <!-- ABOUT -->
+
+            <section class="alumni-profile-section">
+
+                <h2>Professional Information</h2>
+
+                <div class="profile-info-row">
+
+                    <span>Industry</span>
+
+                    <strong>
+                        {{ alumni.get(
+                            "industry",
+                            "Not specified"
+                        ) }}
+                    </strong>
+
+                </div>
+
+                <div class="profile-info-row">
+
+                    <span>Experience</span>
+
+                    <strong>
+                        {{ alumni.get(
+                            "experience",
+                            "Not specified"
+                        ) }}
+                    </strong>
+
+                </div>
+
+                <div class="profile-info-row">
+
+                    <span>Location</span>
+
+                    <strong>
+                        {{ alumni.get(
+                            "current_location",
+                            "Not specified"
+                        ) }}
+                    </strong>
+
+                </div>
+
+            </section>
+
+
+            <!-- SKILLS -->
+
+            <section class="alumni-profile-section">
+
+                <h2>Skills</h2>
+
+                <div class="skill-list">
+
+                    {% if alumni.get("skills") %}
+
+                        {% for skill in alumni.get("skills").split(",") %}
+
+                            <span class="skill-tag">
+                                {{ skill.strip() }}
+                            </span>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <span class="no-data">
+                            No skills added.
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </section>
+
+
+            <!-- MENTORSHIP -->
+
+            <section class="alumni-profile-section">
+
+                <h2>Mentorship & Guidance</h2>
+
+                {% if alumni.get("mentorship") == "yes" %}
+
+                    <div class="mentor-active">
+
+                        <strong>
+                            Available as a Mentor
+                        </strong>
+
+                        <p>
+                            This alumni is interested in
+                            mentoring students.
+                        </p>
+
+                    </div>
+
+                    {% if alumni.get("mentor_areas") %}
+
+                        <div class="mentor-areas">
+
+                            <strong>
+                                Mentorship Areas
+                            </strong>
+
+                            <p>
+                                {{ alumni.get("mentor_areas") }}
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+                {% else %}
+
+                    <div class="no-data">
+                        This alumni has not enabled mentorship.
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+
+            <!-- EDUCATION -->
+
+            <section class="alumni-profile-section">
+
+                <h2>Academic Background</h2>
+
+                <div class="profile-info-row">
+
+                    <span>Degree</span>
+
+                    <strong>
+                        {{ alumni.get("degree", "—") }}
+                    </strong>
+
+                </div>
+
+                <div class="profile-info-row">
+
+                    <span>Department</span>
+
+                    <strong>
+                        {{ alumni.get("department", "—") }}
+                    </strong>
+
+                </div>
+
+                <div class="profile-info-row">
+
+                    <span>Graduation Year</span>
+
+                    <strong>
+                        {{ alumni.get(
+                            "graduation_year",
+                            "—"
+                        ) }}
+                    </strong>
+
+                </div>
+
+            </section>
+
+
+        </div>
+
+
+        <!-- SOCIAL LINKS -->
+
+        <div class="alumni-social-section">
+
+            <h2>Professional Links</h2>
+
+            <div class="social-links">
+
+                {% if alumni.get("linkedin") %}
+
+                <a href="{{ alumni.get('linkedin') }}"
+                   target="_blank">
+                    LinkedIn
+                </a>
+
+                {% endif %}
+
+
+                {% if alumni.get("github") %}
+
+                <a href="{{ alumni.get('github') }}"
+                   target="_blank">
+                    GitHub
+                </a>
+
+                {% endif %}
+
+
+                {% if alumni.get("portfolio") %}
+
+                <a href="{{ alumni.get('portfolio') }}"
+                   target="_blank">
+                    Portfolio
+                </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+</html>

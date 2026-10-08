@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Broadcast Announcement | College Alumni Portal</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .broadcast-container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .broadcast-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 35px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .broadcast-card h1 {
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .broadcast-card p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 14px;
+            border: 1px solid #d5d5d5;
+            border-radius: 7px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #4f35e8;
+        }
+
+        .form-group textarea {
+            min-height: 180px;
+            resize: vertical;
+        }
+
+        .college-group {
+            display: none;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .publish-btn,
+        .cancel-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 42px;
+            padding: 0 22px;
+            border-radius: 7px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .publish-btn {
+            background: #4f35e8;
+            color: white;
+        }
+
+        .publish-btn:hover {
+            background: #3f2ac4;
+        }
+
+        .cancel-btn {
+            background: #eeeeee;
+            color: #333;
+        }
+
+        .cancel-btn:hover {
+            background: #dddddd;
+        }
+
+        .flash-message {
+            padding: 12px 15px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .flash-success {
+            background: #e8f7ee;
+            color: #187a42;
+        }
+
+        .flash-error {
+            background: #fdecec;
+            color: #b42318;
+        }
+
+        @media (max-width: 600px) {
+            .broadcast-card {
+                padding: 22px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .publish-btn,
+            .cancel-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body class="dashboard-body">
+
+    <!-- Navbar -->
+   <header class="top-navbar">
+
+    <!-- Brand -->
+    
+
+       <div class="brand">
+    College Alumni Portal
+</div>
+
+
+    <!-- Navigation -->
+    <nav class="navbar-links">
+
+        <a href="{{ url_for('admin_dashboard') }}">
+            Home
+        </a>
+
+        <a href="{{ url_for('admin_dashboard') }}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('admin_colleges') }}">
+            Colleges
+        </a>
+
+        <a href="{{ url_for('admin_users') }}">
+            Users
+        </a>
+
+    </nav>
+<div class="brand">
+
+    <!-- Admin Profile -->
+    <div class="admin-profile">
+
+        <div class="profile-circle">
+            A
+        </div>
+
+        <div class="profile-info">
+
+            <strong>Platform Admin</strong>
+
+            <span>Administrator</span>
+
+        </div>
+
+        <a href="{{ url_for('logout') }}"
+           style="margin-left: 18px; color: #dc2626; text-decoration: none; font-size: 13px; font-weight: 600;">
+            Logout
+        </a>
+
+    </div>
+
+</header>
+
+    <!-- Main Content -->
+    <main class="broadcast-container">
+
+        <div class="broadcast-card">
+
+            <h1>Broadcast Announcement</h1>
+
+            <p>
+                Send an announcement to all approved colleges or to a
+                specific college.
+            </p>
+
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+
+                        <div class="flash-message
+                            {% if category == 'success' %}
+                                flash-success
+                            {% else %}
+                                flash-error
+                            {% endif %}">
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+
+            <!-- Broadcast Form -->
+            <form method="POST"
+                  action="{{ url_for('admin_broadcast') }}">
+
+                <!-- Title -->
+                <div class="form-group">
+
+                    <label for="title">
+                        Announcement Title
+                    </label>
+
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        placeholder="Enter announcement title"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Target -->
+                <div class="form-group">
+
+                    <label for="target">
+                        Send To
+                    </label>
+
+                    <select id="target"
+                            name="target"
+                            onchange="toggleCollege()"
+                            required>
+
+                        <option value="all">
+                            All Approved Colleges
+                        </option>
+
+                        <option value="college">
+                            Specific College
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- College -->
+                <div class="form-group college-group"
+                     id="collegeGroup">
+
+                    <label for="college_id">
+                        Select College
+                    </label>
+
+                    <select id="college_id"
+                            name="college_id">
+
+                        <option value="">
+                            Select a college
+                        </option>
+
+                        {% for college in colleges %}
+
+                            <option value="{{ college['_id'] }}">
+                                {{ college.get('college_name', 'College') }}
+
+                                {% if college.get('college_code') %}
+                                    - {{ college['college_code'] }}
+                                {% endif %}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- Message -->
+                <div class="form-group">
+
+                    <label for="message">
+                        Message
+                    </label>
+
+                    <textarea
+                        id="message"
+                        name="message"
+                        placeholder="Enter your announcement message..."
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <!-- Buttons -->
+                <div class="button-group">
+
+                    <button type="submit"
+                            class="publish-btn">
+                        Publish Announcement
+                    </button>
+
+                    <a href="{{ url_for('admin_dashboard') }}"
+                       class="cancel-btn">
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+        function toggleCollege() {
+
+            const target =
+                document.getElementById("target").value;
+
+            const collegeGroup =
+                document.getElementById("collegeGroup");
+
+            const collegeSelect =
+                document.getElementById("college_id");
+
+            if (target === "college") {
+
+                collegeGroup.style.display = "block";
+
+                collegeSelect.required = true;
+
+            } else {
+
+                collegeGroup.style.display = "none";
+
+                collegeSelect.required = false;
+
+                collegeSelect.value = "";
+
+            }
+        }
+
+        // Run when page loads
+        toggleCollege();
+
+    </script>
+
+</body>
+</html>

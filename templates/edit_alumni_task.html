@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Task | College Alumni Portal</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        .edit-task-page {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .edit-card {
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+        }
+
+        .edit-card h1 {
+            color: #172b4d;
+            margin-top: 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: 600;
+            font-size: 13px;
+            color: #334155;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 14px;
+            border: 1px solid #d8dee8;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .save-btn,
+        .cancel-btn {
+            height: 40px;
+            padding: 0 20px;
+            border-radius: 7px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .save-btn {
+            background: #4f35e8;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cancel-btn {
+            background: #eeeeee;
+            color: #333;
+        }
+
+    </style>
+
+</head>
+
+<body class="dashboard-body">
+
+    <header class="top-navbar">
+
+        <div class="brand">
+            College Alumni Portal
+        </div>
+
+        <nav class="navbar-links">
+
+            <a href="{{ url_for('alumni_dashboard') }}">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('messages') }}">
+                Messages
+            </a>
+
+            <a href="{{ url_for('alumni_tasks') }}">
+                Tasks
+            </a>
+
+        </nav>
+
+        <div class="admin-profile">
+
+            <div class="profile-circle">
+                {{ alumni.get("full_name", "A")[0]|upper }}
+            </div>
+
+            <div class="profile-info">
+
+                <strong>
+                    {{ alumni.get("full_name", "Alumni") }}
+                </strong>
+
+                <span>
+                    Alumni
+                </span>
+
+            </div>
+
+            <a href="{{ url_for('logout') }}"
+               class="logout-link">
+                Logout
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <main class="edit-task-page">
+
+        <div class="edit-card">
+
+            <h1>Edit Task</h1>
+
+            <p style="color:#718096;">
+                Update the task details and assigned student.
+            </p>
+
+            <form method="POST">
+
+                <div class="form-group">
+
+                    <label>
+                        Task Title
+                    </label>
+
+                    <input
+                        type="text"
+                        name="title"
+                        value="{{ task.get('title', '') }}"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Task Details
+                    </label>
+
+                    <textarea
+                        name="description"
+                        required
+                    >{{ task.get('description', '') }}</textarea>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Due Date
+                    </label>
+
+                    <input
+                        type="date"
+                        name="due_date"
+                        value="{{ task.get('due_date', '') }}"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Priority
+                    </label>
+
+                    <select name="priority">
+
+                        <option value="Low"
+                            {% if task.get('priority') == 'Low' %}
+                                selected
+                            {% endif %}>
+                            Low
+                        </option>
+
+                        <option value="Medium"
+                            {% if task.get('priority', 'Medium') == 'Medium' %}
+                                selected
+                            {% endif %}>
+                            Medium
+                        </option>
+
+                        <option value="High"
+                            {% if task.get('priority') == 'High' %}
+                                selected
+                            {% endif %}>
+                            High
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Assign To
+                    </label>
+
+                    <select name="student_id" required>
+
+                        {% for student in connected_students %}
+
+                            <option
+                                value="{{ student['_id'] }}"
+
+                                {% if task.get('student_id') == student['_id'] %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                {{ student.get(
+                                    'full_name',
+                                    'Student'
+                                ) }}
+
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <div class="buttons">
+
+                    <button
+                        type="submit"
+                        class="save-btn">
+
+                        Save Changes
+
+                    </button>
+
+                    <a
+                        href="{{ url_for('alumni_tasks') }}"
+                        class="cancel-btn">
+
+                        Cancel
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>
