@@ -1,49 +1,47 @@
+
+import os
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-
 from werkzeug.security import generate_password_hash, check_password_hash
-
 from pymongo import MongoClient
-
 from bson.objectid import ObjectId
-
 from pymongo.errors import DuplicateKeyError
-
 from datetime import datetime
+from dotenv import load_dotenv
 
-
+load_dotenv()
 
 app = Flask(__name__)
-
-app.secret_key = "college_alumni_portal_secret_key"
-
-
+app.secret_key = os.getenv("SECRET_KEY", "dev-only-change-this")
 
 # =========================================================
-
-# MONGODB
-
+# MONGODB ATLAS
 # =========================================================
 
+MONGO_URI = os.getenv("MONGO_URI")
 
+if not MONGO_URI:
+    raise RuntimeError("MONGO_URI is missing from your .env file")
 
-client = MongoClient("mongodb://localhost:27017/")
+client = MongoClient(
+    MONGO_URI,
+    serverSelectionTimeoutMS=10000
+)
 
 db = client["college_alumni_portal"]
 
-
+# Test the connection
+try:
+    client.admin.command("ping")
+    print("MongoDB Atlas connected successfully!")
+except Exception as e:
+    print("MongoDB connection failed:", e)
+    raise
 
 colleges_collection = db["colleges"]
-
 students_collection = db["students"]
-
 alumni_collection = db["alumni"]
-
 users_collection = db["users"]
-
-
-
 activity_collection = db["activity_logs"]
-
 
 
 
