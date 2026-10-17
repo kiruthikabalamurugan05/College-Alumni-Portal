@@ -65,6 +65,15 @@ The system also allows college administrators to manage students and alumni.
 
 ---
 
+## Deploy to Vercel
+
+1. Push this repository to GitHub and import it as a project in Vercel. Keep the project root set to the directory containing `app.py` and `vercel.json`.
+2. In Vercel project settings, add `MONGO_URI`, `SECRET_KEY`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` for Production (and Preview if needed). Use your Atlas connection string for `MONGO_URI`; generate `SECRET_KEY` with `python -c "import secrets; print(secrets.token_hex(32))"`.
+3. In MongoDB Atlas, create a database user for the app and allow connections from Vercel in Network Access. Avoid committing `.env`; it is only for local development.
+4. Deploy the project from Vercel. The platform-admin account is created on startup if the configured email does not already exist. Existing accounts are not reset to the configured password.
+
+---
+
 ## System Workflow
 
 ```text

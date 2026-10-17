@@ -11,7 +11,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.getenv("SECRET_KEY", "dev-only-change-this")
+app.secret_key = os.getenv("SECRET_KEY")
+if not app.secret_key:
+    raise RuntimeError("SECRET_KEY environment variable is missing")
 
 # =========================================================
 # MONGODB ATLAS
@@ -20,7 +22,7 @@ app.secret_key = os.getenv("SECRET_KEY", "dev-only-change-this")
 MONGO_URI = os.getenv("MONGO_URI")
 
 if not MONGO_URI:
-    raise RuntimeError("MONGO_URI is missing from your .env file")
+    raise RuntimeError("MONGO_URI environment variable is missing")
 
 client = MongoClient(
     MONGO_URI,
@@ -91,13 +93,16 @@ colleges_collection.create_index("college_code", unique=True)
 
 
 
-ADMIN_EMAIL = "alumniportal@gmail.com"
+ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "").strip().lower()
 
-ADMIN_PASSWORD = "AlumniPortalAdmin@123"
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 
 
 
-if not users_collection.find_one({"email": ADMIN_EMAIL}):
+if bool(ADMIN_EMAIL) != bool(ADMIN_PASSWORD):
+    raise RuntimeError("Set both ADMIN_EMAIL and ADMIN_PASSWORD, or leave both unset")
+
+if ADMIN_EMAIL and not users_collection.find_one({"email": ADMIN_EMAIL}):
 
     users_collection.insert_one({
 
